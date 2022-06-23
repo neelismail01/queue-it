@@ -10,7 +10,7 @@ import MusicKit
 
 class ViewModel: ObservableObject {
     @Published var musicAuthorizationStatus: MusicAuthorization.Status = .notDetermined
-    @Published var songSearchResults: MusicItemCollection<Song>?
+    @Published var songSearchResults: [SongItem] = []
     
     func loginWithAppleMusic(_ status: MusicAuthorization.Status) {
         musicAuthorizationStatus = status
@@ -18,10 +18,17 @@ class ViewModel: ObservableObject {
     
     func searchAppleMusicCatalog(for query: String) async {
         do {
-            let searchRequest = MusicCatalogSearchRequest(term: query, types: [Song.self])
-            let response = try await searchRequest.response()
-            await MainActor.run {
-                self.songSearchResults = response.songs
+            if !query.isEmpty {
+                let searchRequest = MusicCatalogSearchRequest(term: query, types: [Song.self])
+                let response = try await searchRequest.response()
+                await MainActor.run {
+                    self.songSearchResults = response.songs.compactMap({
+                        return .init(title: $0.title,
+                                     artistName: $0.artistName,
+                                     imageUrl: $0.artwork?.url(width: 50, height: 50))
+                    })
+                    // self.songSearchResults = response.songs
+                }
             }
         } catch {
             print("Music Catalog Search error: \(error)")
