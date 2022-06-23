@@ -7,18 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D61E14DE285695AC0026A8EB /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63B41B3285685B700F90428 /* SpotifyiOS.framework */; };
+		D652D512285E707200B139C2 /* CreateQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652D511285E707200B139C2 /* CreateQueueView.swift */; };
+		D6801F0D2863C01E00C4F21B /* MySongsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6801F0C2863C01E00C4F21B /* MySongsResponse.swift */; };
 		D69426B228565C8700D91973 /* SharedAuxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69426B128565C8700D91973 /* SharedAuxApp.swift */; };
 		D69426B428565C8700D91973 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69426B328565C8700D91973 /* ContentView.swift */; };
 		D69426B628565C8A00D91973 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D69426B528565C8A00D91973 /* Assets.xcassets */; };
 		D69426B928565C8A00D91973 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D69426B828565C8A00D91973 /* Preview Assets.xcassets */; };
+		D6EC24DE285FBC55004A3A2F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EC24DD285FBC55004A3A2F /* SearchView.swift */; };
+		D6EC24E028602B47004A3A2F /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EC24DF28602B47004A3A2F /* WelcomeView.swift */; };
+		D6F8CB7F285C06D500C2AD23 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F8CB7E285C06D500C2AD23 /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D63B41B3285685B700F90428 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
+		D652D511285E707200B139C2 /* CreateQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQueueView.swift; sourceTree = "<group>"; };
+		D6801F0C2863C01E00C4F21B /* MySongsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySongsResponse.swift; sourceTree = "<group>"; };
 		D69426AE28565C8700D91973 /* SharedAux.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SharedAux.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D69426B128565C8700D91973 /* SharedAuxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAuxApp.swift; sourceTree = "<group>"; };
 		D69426B328565C8700D91973 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D69426B528565C8A00D91973 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D69426B828565C8A00D91973 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D69426C128565CEA00D91973 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D69426CB28567E2B00D91973 /* SharedAux-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SharedAux-Bridging-Header.h"; sourceTree = "<group>"; };
+		D6EC24DD285FBC55004A3A2F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		D6EC24DF28602B47004A3A2F /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		D6F8CB7E285C06D500C2AD23 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,12 +40,48 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D61E14DE285695AC0026A8EB /* SpotifyiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D63B41B5285688A000F90428 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D63B41B3285685B700F90428 /* SpotifyiOS.framework */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		D6801F072863BB3800C4F21B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D6801F0C2863C01E00C4F21B /* MySongsResponse.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D6801F082863BB3E00C4F21B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D69426B328565C8700D91973 /* ContentView.swift */,
+				D652D511285E707200B139C2 /* CreateQueueView.swift */,
+				D6EC24DD285FBC55004A3A2F /* SearchView.swift */,
+				D6EC24DF28602B47004A3A2F /* WelcomeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D6801F092863BB5700C4F21B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D6F8CB7E285C06D500C2AD23 /* ViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		D69426A528565C8700D91973 = {
 			isa = PBXGroup;
 			children = (
@@ -51,10 +101,15 @@
 		D69426B028565C8700D91973 /* SharedAux */ = {
 			isa = PBXGroup;
 			children = (
+				D6801F092863BB5700C4F21B /* ViewModels */,
+				D6801F082863BB3E00C4F21B /* Views */,
+				D6801F072863BB3800C4F21B /* Models */,
+				D63B41B5285688A000F90428 /* Frameworks */,
+				D69426C128565CEA00D91973 /* Info.plist */,
 				D69426B128565C8700D91973 /* SharedAuxApp.swift */,
-				D69426B328565C8700D91973 /* ContentView.swift */,
 				D69426B528565C8A00D91973 /* Assets.xcassets */,
 				D69426B728565C8A00D91973 /* Preview Content */,
+				D69426CB28567E2B00D91973 /* SharedAux-Bridging-Header.h */,
 			);
 			path = SharedAux;
 			sourceTree = "<group>";
@@ -137,7 +192,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D652D512285E707200B139C2 /* CreateQueueView.swift in Sources */,
+				D6801F0D2863C01E00C4F21B /* MySongsResponse.swift in Sources */,
+				D6EC24E028602B47004A3A2F /* WelcomeView.swift in Sources */,
 				D69426B428565C8700D91973 /* ContentView.swift in Sources */,
+				D6F8CB7F285C06D500C2AD23 /* ViewModel.swift in Sources */,
+				D6EC24DE285FBC55004A3A2F /* SearchView.swift in Sources */,
 				D69426B228565C8700D91973 /* SharedAuxApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,6 +242,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/SharedAux/Frameworks";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -243,6 +304,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/SharedAux/Frameworks";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -271,7 +333,14 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SharedAux/Preview Content\"";
 				DEVELOPMENT_TEAM = 6FPV73NHLV;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/SharedAux/Frameworks",
+					"$(PROJECT_DIR)/SharedAux/Frameworks",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SharedAux/Info.plist;
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Shared Aux requires access to your music library to enable you to play music";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -282,9 +351,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neelismail.SharedAux;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "SharedAux/SharedAux-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -300,7 +371,14 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SharedAux/Preview Content\"";
 				DEVELOPMENT_TEAM = 6FPV73NHLV;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/SharedAux/Frameworks",
+					"$(PROJECT_DIR)/SharedAux/Frameworks",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SharedAux/Info.plist;
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Shared Aux requires access to your music library to enable you to play music";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -311,9 +389,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neelismail.SharedAux;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "SharedAux/SharedAux-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
