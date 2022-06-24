@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		D61E14DE285695AC0026A8EB /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63B41B3285685B700F90428 /* SpotifyiOS.framework */; };
 		D652D512285E707200B139C2 /* CreateQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652D511285E707200B139C2 /* CreateQueueView.swift */; };
-		D68879B82864FB00005063F1 /* SongItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68879B72864FB00005063F1 /* SongItem.swift */; };
 		D69426B228565C8700D91973 /* SharedAuxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69426B128565C8700D91973 /* SharedAuxApp.swift */; };
 		D69426B428565C8700D91973 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69426B328565C8700D91973 /* ContentView.swift */; };
 		D69426B628565C8A00D91973 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D69426B528565C8A00D91973 /* Assets.xcassets */; };
@@ -22,7 +21,6 @@
 /* Begin PBXFileReference section */
 		D63B41B3285685B700F90428 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		D652D511285E707200B139C2 /* CreateQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQueueView.swift; sourceTree = "<group>"; };
-		D68879B72864FB00005063F1 /* SongItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongItem.swift; sourceTree = "<group>"; };
 		D69426AE28565C8700D91973 /* SharedAux.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SharedAux.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D69426B128565C8700D91973 /* SharedAuxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAuxApp.swift; sourceTree = "<group>"; };
 		D69426B328565C8700D91973 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -58,7 +56,6 @@
 		D6801F072863BB3800C4F21B /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				D68879B72864FB00005063F1 /* SongItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -193,7 +190,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D652D512285E707200B139C2 /* CreateQueueView.swift in Sources */,
-				D68879B82864FB00005063F1 /* SongItem.swift in Sources */,
 				D6EC24E028602B47004A3A2F /* WelcomeView.swift in Sources */,
 				D69426B428565C8700D91973 /* ContentView.swift in Sources */,
 				D6F8CB7F285C06D500C2AD23 /* ViewModel.swift in Sources */,

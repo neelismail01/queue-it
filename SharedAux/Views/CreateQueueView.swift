@@ -6,15 +6,17 @@
 //
 
 import SwiftUI
+import MediaPlayer
 
 struct CreateQueueView: View {
     
     @EnvironmentObject var viewModel: ViewModel
+    @Binding var musicPlayer: MPMusicPlayerController
 
     var body: some View {
         ZStack {
             gradient
-            NavigationLink(destination: SearchView()) {
+            NavigationLink(destination: SearchView(musicPlayer: self.$musicPlayer)) {
                     Text("Create A Queue")
                         .font(Font.system(size: 20, weight: .bold))
                         .multilineTextAlignment(.center)

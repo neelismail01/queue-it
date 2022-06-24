@@ -12,6 +12,7 @@ import MediaPlayer
 struct SearchView: View {
     
     @EnvironmentObject var viewModel: ViewModel
+    @Binding var musicPlayer: MPMusicPlayerController
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,7 +20,7 @@ struct SearchView: View {
             
             List {
                 ForEach(viewModel.songSearchResults, id: \.id) { song in
-                    SearchResult(song: song)
+                    SearchResult(musicPlayer: self.$musicPlayer, song: song)
                 }
             }
             .listStyle(PlainListStyle())
@@ -53,27 +54,32 @@ struct SearchBar: View {
                 await viewModel.searchAppleMusicCatalog(for: query)
             }
         }
-        .padding([.leading, .trailing, .top, .bottom])
+        .padding()
     }
 }
 
 struct SearchResult: View {
-    var song: SongItem
     
+    @Binding var musicPlayer: MPMusicPlayerController
+    var song: Song
+        
     var body: some View {
         HStack {
-            AsyncImage(url: song.imageUrl)
+            AsyncImage(url: song.artwork?.url(width: 50, height: 50))
                 .frame(width: 50, height: 50, alignment: .center)
             VStack(alignment: .leading) {
                 Text(song.title)
                     .font(.system(size: 16, weight: .semibold))
-                Spacer()
                 Text(song.artistName)
                     .font(.system(size: 14, weight: .light))
                     .foregroundColor(.gray)
             }
             Spacer()
             Image(systemName: "play.circle")
+        }
+        .onTapGesture {
+            self.musicPlayer.setQueue(with: [song.id.rawValue])
+            self.musicPlayer.play()
         }
     }
 }

@@ -6,17 +6,18 @@
 //
 
 import SwiftUI
+import MediaPlayer
 
 struct ContentView: View {
     @StateObject var viewModel: ViewModel = ViewModel()
+    @State private var musicPlayer = MPMusicPlayerController.applicationMusicPlayer
     
     var body: some View {
         NavigationView {
             if viewModel.musicAuthorizationStatus == .authorized {
                 WelcomeView()
             } else {
-                CreateQueueView()
-                SearchView()
+                CreateQueueView(musicPlayer: self.$musicPlayer)
             }
         }
         .environmentObject(viewModel)

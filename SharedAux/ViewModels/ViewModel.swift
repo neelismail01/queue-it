@@ -10,7 +10,8 @@ import MusicKit
 
 class ViewModel: ObservableObject {
     @Published var musicAuthorizationStatus: MusicAuthorization.Status = .notDetermined
-    @Published var songSearchResults: [SongItem] = []
+    @Published var songSearchResults: [Song] = []
+    @Published var songQueue: MusicItemCollection<Track>?
     
     func loginWithAppleMusic(_ status: MusicAuthorization.Status) {
         musicAuthorizationStatus = status
@@ -22,12 +23,7 @@ class ViewModel: ObservableObject {
                 let searchRequest = MusicCatalogSearchRequest(term: query, types: [Song.self])
                 let response = try await searchRequest.response()
                 await MainActor.run {
-                    self.songSearchResults = response.songs.compactMap({
-                        return .init(title: $0.title,
-                                     artistName: $0.artistName,
-                                     imageUrl: $0.artwork?.url(width: 50, height: 50))
-                    })
-                    // self.songSearchResults = response.songs
+                    self.songSearchResults = response.songs.compactMap { $0 }
                 }
             }
         } catch {
