@@ -12,32 +12,23 @@ import MediaPlayer
 struct SearchView: View {
     
     @EnvironmentObject var viewModel: ViewModel
-    @Binding var musicPlayer: MPMusicPlayerController
+    @FocusState var searchFieldFocused: Bool
+    @State var query = ""
     
     var body: some View {
         VStack(alignment: .leading) {
-            SearchBar()
-            
-            List {
-                ForEach(viewModel.songSearchResults, id: \.id) { song in
-                    SearchResult(musicPlayer: self.$musicPlayer, song: song)
-                }
-            }
-            .listStyle(PlainListStyle())
+            searchBar
+            searchResults
         }
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
         .navigationTitle("Search Music")
     }
-}
-
-struct SearchBar: View {
-    @State private var query = ""
-    @EnvironmentObject var viewModel: ViewModel
     
-    var body: some View {
+    var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass").foregroundColor(.gray)
             TextField("Search songs, artists, albums", text: $query)
+                .focused($searchFieldFocused)
         }
         .padding(5)
         .overlay(
@@ -56,31 +47,33 @@ struct SearchBar: View {
         }
         .padding()
     }
-}
-
-struct SearchResult: View {
     
-    @Binding var musicPlayer: MPMusicPlayerController
-    var song: Song
-        
-    var body: some View {
-        HStack {
-            AsyncImage(url: song.artwork?.url(width: 50, height: 50))
-                .frame(width: 50, height: 50, alignment: .center)
-            VStack(alignment: .leading) {
-                Text(song.title)
-                    .font(.system(size: 16, weight: .semibold))
-                Text(song.artistName)
-                    .font(.system(size: 14, weight: .light))
-                    .foregroundColor(.gray)
+    var searchResults: some View {
+        List {
+            ForEach(viewModel.songSearchResults, id: \.id) { song in
+                HStack {
+                    AsyncImage(url: song.artwork?.url(width: 50, height: 50))
+                        .frame(width: 50, height: 50, alignment: .center)
+                    VStack(alignment: .leading) {
+                        Text(song.title)
+                            .font(.system(size: 16, weight: .semibold))
+                        Text(song.artistName)
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundColor(.gray)
+                    }
+                    Spacer()
+                    Image(systemName: "play.circle")
+                }
+                .onTapGesture {
+                    searchFieldFocused = false
+                    viewModel.musicPlayer.setQueue(with: [song.id.rawValue])
+                    viewModel.musicPlayer.play()
+                    viewModel.isSongPlaying = true
+                }
             }
-            Spacer()
-            Image(systemName: "play.circle")
         }
-        .onTapGesture {
-            self.musicPlayer.setQueue(with: [song.id.rawValue])
-            self.musicPlayer.play()
-        }
+        .listStyle(PlainListStyle())
     }
+    
 }
 

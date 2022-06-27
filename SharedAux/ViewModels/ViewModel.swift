@@ -7,11 +7,20 @@
 
 import Foundation
 import MusicKit
+import MediaPlayer
 
 class ViewModel: ObservableObject {
     @Published var musicAuthorizationStatus: MusicAuthorization.Status = .notDetermined
+    
     @Published var songSearchResults: [Song] = []
-    @Published var songQueue: MusicItemCollection<Track>?
+    
+    @Published var currentlyPlayingItem: MPMediaItem?
+    @Published var isSongPlaying = false
+    
+    @Published var isPlayerViewPresented = false
+    
+    var musicPlayer = MPMusicPlayerController.applicationMusicPlayer
+    var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     func loginWithAppleMusic(_ status: MusicAuthorization.Status) {
         musicAuthorizationStatus = status
@@ -28,6 +37,14 @@ class ViewModel: ObservableObject {
             }
         } catch {
             print("Music Catalog Search error: \(error)")
+        }
+    }
+    
+    func checkCurrentlyPlayingSong() {
+        if let currentSong = musicPlayer.nowPlayingItem {
+            if currentSong != currentlyPlayingItem {
+                currentlyPlayingItem = currentSong
+            }
         }
     }
 }

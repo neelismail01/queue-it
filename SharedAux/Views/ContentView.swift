@@ -10,17 +10,26 @@ import MediaPlayer
 
 struct ContentView: View {
     @StateObject var viewModel: ViewModel = ViewModel()
-    @State private var musicPlayer = MPMusicPlayerController.applicationMusicPlayer
     
     var body: some View {
-        NavigationView {
-            if viewModel.musicAuthorizationStatus == .authorized {
-                WelcomeView()
-            } else {
-                CreateQueueView(musicPlayer: self.$musicPlayer)
+            NavigationView {
+                if viewModel.musicAuthorizationStatus == .authorized {
+                    WelcomeView()
+                } else {
+                    ZStack {
+                        CreateQueueView()
+                        PlaybackBarView()
+                    }
+                }
             }
-        }
-        .environmentObject(viewModel)
+            .zIndex(1)
+            .sheet(isPresented: $viewModel.isPlayerViewPresented, content: {
+                PlaybackFullScreenView()
+                    .environmentObject(viewModel)
+                    .zIndex(2)
+            })
+            .environmentObject(viewModel)
+
     }
 }
 

@@ -11,12 +11,11 @@ import MediaPlayer
 struct CreateQueueView: View {
     
     @EnvironmentObject var viewModel: ViewModel
-    @Binding var musicPlayer: MPMusicPlayerController
 
     var body: some View {
         ZStack {
             gradient
-            NavigationLink(destination: SearchView(musicPlayer: self.$musicPlayer)) {
+            NavigationLink(destination: SearchView()) {
                     Text("Create A Queue")
                         .font(Font.system(size: 20, weight: .bold))
                         .multilineTextAlignment(.center)
@@ -36,7 +35,6 @@ struct CreateQueueView: View {
         }
     }
     
-    /// Constructs a gradient to use as the view background.
     private var gradient: some View {
         LinearGradient(
             gradient: Gradient(colors: [
