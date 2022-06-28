@@ -17,24 +17,9 @@ struct SearchView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            searchBar
             searchResults
         }
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-        .navigationTitle("Search Music")
-    }
-    
-    var searchBar: some View {
-        HStack {
-            Image(systemName: "magnifyingglass").foregroundColor(.gray)
-            TextField("Search songs, artists, albums", text: $query)
-                .focused($searchFieldFocused)
-        }
-        .padding(5)
-        .overlay(
-            RoundedRectangle(cornerRadius: 5)
-                .stroke(Color.gray, lineWidth: 1)
-        )
+        .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always))
         .onChange(of: query) { newValue in
             Task {
                 await viewModel.searchAppleMusicCatalog(for: newValue)
@@ -45,7 +30,7 @@ struct SearchView: View {
                 await viewModel.searchAppleMusicCatalog(for: query)
             }
         }
-        .padding()
+        .navigationTitle("Search Music")
     }
     
     var searchResults: some View {
