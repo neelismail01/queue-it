@@ -10,6 +10,9 @@ import MusicKit
 import MediaPlayer
 
 class ViewModel: ObservableObject {
+    var musicPlayer = MPMusicPlayerController.applicationMusicPlayer
+    var timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    
     @Published var musicAuthorizationStatus: MusicAuthorization.Status = .notDetermined
     
     @Published var songSearchResults: [Song] = []
@@ -19,8 +22,7 @@ class ViewModel: ObservableObject {
     
     @Published var isPlayerViewPresented = false
     
-    var musicPlayer = MPMusicPlayerController.applicationMusicPlayer
-    var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
     
     func loginWithAppleMusic(_ status: MusicAuthorization.Status) {
         musicAuthorizationStatus = status
@@ -42,9 +44,7 @@ class ViewModel: ObservableObject {
     
     func checkCurrentlyPlayingSong() {
         if let currentSong = musicPlayer.nowPlayingItem {
-            if currentSong != currentlyPlayingItem {
-                currentlyPlayingItem = currentSong
-            }
+            currentlyPlayingItem = currentSong
         }
     }
 }
