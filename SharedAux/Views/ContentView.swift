@@ -9,7 +9,7 @@ import SwiftUI
 import MediaPlayer
 
 struct ContentView: View {
-    @StateObject var viewModel: ViewModel = ViewModel()
+    @EnvironmentObject var viewModel: ViewModel
     
     var body: some View {
             NavigationView {
@@ -25,10 +25,8 @@ struct ContentView: View {
             .zIndex(1)
             .sheet(isPresented: $viewModel.isPlayerViewPresented, content: {
                 PlaybackFullScreenView()
-                    .environmentObject(viewModel)
                     .zIndex(2)
             })
-            .environmentObject(viewModel)
 
     }
 }
