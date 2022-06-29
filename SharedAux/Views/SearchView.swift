@@ -12,7 +12,6 @@ import MediaPlayer
 struct SearchView: View {
     
     @EnvironmentObject var viewModel: ViewModel
-    @FocusState var searchFieldFocused: Bool
     @State var query = ""
     
     var body: some View {
@@ -50,7 +49,6 @@ struct SearchView: View {
                     Image(systemName: "play.circle")
                 }
                 .onTapGesture {
-                    searchFieldFocused = false
                     viewModel.musicPlayer.setQueue(with: [song.id.rawValue])
                     viewModel.musicPlayer.play()
                     viewModel.isSongPlaying = true

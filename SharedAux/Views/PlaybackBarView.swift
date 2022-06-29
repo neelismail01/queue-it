@@ -53,9 +53,8 @@ struct PlaybackBarView: View {
     }
     
     var playPauseButton: some View {
-        let currentSong = viewModel.currentlyPlayingItem
         return HStack {
-            if currentSong == nil {
+            if viewModel.currentlyPlayingItem == nil {
                 Image(systemName: "play.fill")
                     .font(.system(size: 22))
                     .foregroundColor(.gray)
