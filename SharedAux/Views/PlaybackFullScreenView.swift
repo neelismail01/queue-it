@@ -10,7 +10,9 @@ import SwiftUI
 struct PlaybackFullScreenView: View {
     @EnvironmentObject var viewModel: ViewModel
     @State var songTime = 0.0
-    let screenWidth = UIScreen.main.bounds.size.width - 20
+    @State private var isEditing = false
+    
+    let screenWidth = UIScreen.main.bounds.size.width - 40
     
     var albumArt: some View {
         let currentSong = viewModel.currentlyPlayingItem
@@ -38,18 +40,16 @@ struct PlaybackFullScreenView: View {
             if let currentSong = viewModel.currentlyPlayingItem {
                 VStack {
                     Text(currentSong.title ?? "Unknown Song")
-                        .font(.system(size: 22, weight: .semibold))
+                        .font(.system(size: 24, weight: .semibold))
                         .lineLimit(1)
                     Text(currentSong.artist ?? "Unknown Artist")
-                        .font(.system(size: 18, weight: .light))
+                        .font(.system(size: 16, weight: .light))
                         .foregroundColor(.gray)
                         .lineLimit(1)
                 }
-                .padding(.leading, 5)
-                .padding(.trailing)
             } else {
                 Text("Not Playing")
-                    .font(.system(size: 22, weight: .semibold))
+                    .font(.system(size: 24, weight: .semibold))
                     .foregroundColor(.gray)
             }
         }
@@ -60,9 +60,13 @@ struct PlaybackFullScreenView: View {
         let musicPlayer = viewModel.musicPlayer
         
         return VStack {
-            Slider(value: $songTime, in: 0...(song?.playbackDuration ?? 0.0))
-                .accentColor(.purple)
-                .controlSize(.mini)
+            Slider(value: $songTime, in: 0...(song?.playbackDuration ?? 0.0)) { editing in
+                isEditing = editing
+                if !editing {
+                    musicPlayer.currentPlaybackTime = songTime
+                }
+            }
+            .controlSize(.mini)
             
             HStack {
                 let currentPlaybackTime = musicPlayer.currentPlaybackTime
@@ -84,25 +88,26 @@ struct PlaybackFullScreenView: View {
                     .font(.system(size: 10))
             }
         }
+        .padding(.top, 10)
+        .padding(.bottom, 10)
     }
     
     var playbackControls: some View {
         HStack {
+            Spacer()
             Image(systemName: "backward.end.fill")
                 .font(.system(size: 24))
-            
             Spacer()
-            
             if viewModel.currentlyPlayingItem == nil{
-                Image(systemName: "play.fill")
-                    .font(.system(size: 28))
+                Image(systemName: "play.circle.fill")
+                    .font(.system(size: 64))
             } else if viewModel.isSongPlaying {
                 Button {
                     viewModel.musicPlayer.pause()
                     viewModel.isSongPlaying = false
                 } label: {
-                    Image(systemName: "pause.fill")
-                        .font(.system(size: 28))
+                    Image(systemName: "pause.circle.fill")
+                        .font(.system(size: 64))
                 }
                 .buttonStyle(PlainButtonStyle())
             } else {
@@ -110,18 +115,16 @@ struct PlaybackFullScreenView: View {
                     viewModel.musicPlayer.play()
                     viewModel.isSongPlaying = true
                 } label: {
-                    Image(systemName: "play.fill")
-                        .font(.system(size: 28))
+                    Image(systemName: "play.circle.fill")
+                        .font(.system(size: 64))
                 }
                 .buttonStyle(PlainButtonStyle())
             }
-            
             Spacer()
-            
             Image(systemName: "forward.end.fill")
                 .font(.system(size: 24))
+            Spacer()
         }
-        .padding(.top)
     }
     
     var body: some View {
@@ -133,8 +136,10 @@ struct PlaybackFullScreenView: View {
         }
         .padding()
         .onReceive(viewModel.timer) { _ in
-            viewModel.checkCurrentlyPlayingSong()
-            songTime = viewModel.musicPlayer.currentPlaybackTime
+            if !isEditing {
+                viewModel.checkCurrentlyPlayingSong()
+                songTime = viewModel.musicPlayer.currentPlaybackTime
+            }
         }
     }
 }
