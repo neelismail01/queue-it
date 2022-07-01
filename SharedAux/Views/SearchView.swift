@@ -48,10 +48,13 @@ struct SearchView: View {
                     Spacer()
                     Image(systemName: "play.circle")
                 }
-                .onTapGesture {
-                    viewModel.musicPlayer.setQueue(with: [song.id.rawValue])
-                    viewModel.musicPlayer.play()
-                    viewModel.isSongPlaying = true
+                .swipeActions(edge: .leading) {
+                    Button {
+                        viewModel.addSongToQueue(song.id.rawValue)
+                    } label: {
+                        Image(systemName: "text.insert")
+                    }
+                    .tint(.indigo)
                 }
             }
         }

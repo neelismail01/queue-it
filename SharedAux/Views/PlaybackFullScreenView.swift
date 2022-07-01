@@ -121,8 +121,13 @@ struct PlaybackFullScreenView: View {
                 .buttonStyle(PlainButtonStyle())
             }
             Spacer()
-            Image(systemName: "forward.end.fill")
-                .font(.system(size: 24))
+            Button {
+                viewModel.playNextSong()
+            } label: {
+                Image(systemName: "forward.end.fill")
+                    .font(.system(size: 24))
+            }
+            .buttonStyle(PlainButtonStyle())
             Spacer()
         }
     }
