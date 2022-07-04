@@ -10,7 +10,7 @@ import MusicKit
 import MediaPlayer
 
 struct SearchView: View {
-    
+    @Environment(\.dismissSearch) private var dismissSearch
     @EnvironmentObject var viewModel: ViewModel
     @State var query = ""
     
@@ -22,11 +22,13 @@ struct SearchView: View {
         .onChange(of: query) { newValue in
             Task {
                 await viewModel.searchAppleMusicCatalog(for: newValue)
+                dismissSearch()
             }
         }
         .onSubmit {
             Task {
                 await viewModel.searchAppleMusicCatalog(for: query)
+                dismissSearch()
             }
         }
         .navigationTitle("Search Music")
@@ -48,13 +50,8 @@ struct SearchView: View {
                     Spacer()
                     Image(systemName: "play.circle")
                 }
-                .swipeActions(edge: .leading) {
-                    Button {
-                        viewModel.addSongToQueue(song.id.rawValue)
-                    } label: {
-                        Image(systemName: "text.insert")
-                    }
-                    .tint(.indigo)
+                .onTapGesture {
+                    viewModel.addSongToQueue(song.id.rawValue)
                 }
             }
         }

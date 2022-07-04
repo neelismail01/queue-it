@@ -17,8 +17,8 @@ struct ContentView: View {
                     WelcomeView()
                 } else {
                     ZStack {
-                        CreateQueueView()
-                        PlaybackBarView()
+                        HomeView()
+                        // PlaybackBarView()
                     }
                 }
             }

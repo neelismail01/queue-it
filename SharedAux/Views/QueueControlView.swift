@@ -9,12 +9,11 @@ import SwiftUI
 
 struct QueueControlView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct QueueControlView_Previews: PreviewProvider {
-    static var previews: some View {
-        QueueControlView()
+        VStack {
+            NavigationLink(destination: SearchView()) {
+                Text("Add a song")
+            }
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
