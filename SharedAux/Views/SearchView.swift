@@ -22,13 +22,11 @@ struct SearchView: View {
         .onChange(of: query) { newValue in
             Task {
                 await viewModel.searchAppleMusicCatalog(for: newValue)
-                dismissSearch()
             }
         }
         .onSubmit {
             Task {
                 await viewModel.searchAppleMusicCatalog(for: query)
-                dismissSearch()
             }
         }
         .navigationTitle("Search Music")
@@ -51,7 +49,9 @@ struct SearchView: View {
                     Image(systemName: "play.circle")
                 }
                 .onTapGesture {
-                    viewModel.addSongToQueue(song.id.rawValue)
+                    Task {
+                        await viewModel.addSongToFirebaseQueue(songId: song.id.rawValue)
+                    }
                 }
             }
         }
