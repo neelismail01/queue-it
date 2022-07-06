@@ -1,0 +1,6 @@
+framework module Pods_SharedAux {
+  umbrella header "Pods-SharedAux-umbrella.h"
+
+  export *
+  module * { export * }
+}

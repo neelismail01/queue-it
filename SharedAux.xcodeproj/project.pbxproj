@@ -7,31 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D61E14DE285695AC0026A8EB /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63B41B3285685B700F90428 /* SpotifyiOS.framework */; };
+		106C1F1450F77640481D2894 /* Pods_SharedAux.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D2C303754B2D4E67819CD2 /* Pods_SharedAux.framework */; };
 		D652D512285E707200B139C2 /* CreateQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652D511285E707200B139C2 /* CreateQueueView.swift */; };
+		D659F4632874A93500D87322 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D659F4622874A93500D87322 /* Queue.swift */; };
 		D68879BA28666639005063F1 /* PlaybackBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68879B928666639005063F1 /* PlaybackBarView.swift */; };
 		D68879BE286761D0005063F1 /* PlaybackFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68879BD286761D0005063F1 /* PlaybackFullScreenView.swift */; };
 		D69426B228565C8700D91973 /* SharedAuxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69426B128565C8700D91973 /* SharedAuxApp.swift */; };
 		D69426B428565C8700D91973 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69426B328565C8700D91973 /* ContentView.swift */; };
 		D69426B628565C8A00D91973 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D69426B528565C8A00D91973 /* Assets.xcassets */; };
-		D69426B928565C8A00D91973 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D69426B828565C8A00D91973 /* Preview Assets.xcassets */; };
+		D694B6FE287006EA00B9B414 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D694B6FD287006E900B9B414 /* GoogleService-Info.plist */; };
+		D694B7002872100300B9B414 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D694B6FF2872100300B9B414 /* HomeView.swift */; };
+		D6CEC1FF287231A6002E97FC /* JoinQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEC1FE287231A6002E97FC /* JoinQueueView.swift */; };
+		D6CEC201287283D3002E97FC /* QueueControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEC200287283D3002E97FC /* QueueControlView.swift */; };
 		D6EC24DE285FBC55004A3A2F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EC24DD285FBC55004A3A2F /* SearchView.swift */; };
 		D6EC24E028602B47004A3A2F /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EC24DF28602B47004A3A2F /* WelcomeView.swift */; };
 		D6F8CB7F285C06D500C2AD23 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F8CB7E285C06D500C2AD23 /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D63B41B3285685B700F90428 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
+		07189CC31FB131F8FE4D7CEF /* Pods-SharedAux.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SharedAux.debug.xcconfig"; path = "Target Support Files/Pods-SharedAux/Pods-SharedAux.debug.xcconfig"; sourceTree = "<group>"; };
+		34D2C303754B2D4E67819CD2 /* Pods_SharedAux.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SharedAux.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7699DCF139039B6483375A62 /* Pods-SharedAux.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SharedAux.release.xcconfig"; path = "Target Support Files/Pods-SharedAux/Pods-SharedAux.release.xcconfig"; sourceTree = "<group>"; };
 		D652D511285E707200B139C2 /* CreateQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQueueView.swift; sourceTree = "<group>"; };
+		D659F4622874A93500D87322 /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		D68879B928666639005063F1 /* PlaybackBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackBarView.swift; sourceTree = "<group>"; };
 		D68879BD286761D0005063F1 /* PlaybackFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackFullScreenView.swift; sourceTree = "<group>"; };
 		D69426AE28565C8700D91973 /* SharedAux.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SharedAux.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D69426B128565C8700D91973 /* SharedAuxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAuxApp.swift; sourceTree = "<group>"; };
 		D69426B328565C8700D91973 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D69426B528565C8A00D91973 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D69426B828565C8A00D91973 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D69426C128565CEA00D91973 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D69426CB28567E2B00D91973 /* SharedAux-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SharedAux-Bridging-Header.h"; sourceTree = "<group>"; };
+		D694B6FD287006E900B9B414 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D694B6FF2872100300B9B414 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D6CEC1FE287231A6002E97FC /* JoinQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinQueueView.swift; sourceTree = "<group>"; };
+		D6CEC200287283D3002E97FC /* QueueControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueControlView.swift; sourceTree = "<group>"; };
 		D6EC24DD285FBC55004A3A2F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		D6EC24DF28602B47004A3A2F /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		D6F8CB7E285C06D500C2AD23 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
@@ -42,24 +52,34 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D61E14DE285695AC0026A8EB /* SpotifyiOS.framework in Frameworks */,
+				106C1F1450F77640481D2894 /* Pods_SharedAux.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D63B41B5285688A000F90428 /* Frameworks */ = {
+		0234B3BA2E0AE39362D5A24A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D63B41B3285685B700F90428 /* SpotifyiOS.framework */,
+				34D2C303754B2D4E67819CD2 /* Pods_SharedAux.framework */,
 			);
-			path = Frameworks;
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2E2FCD834B6448C26F89689E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				07189CC31FB131F8FE4D7CEF /* Pods-SharedAux.debug.xcconfig */,
+				7699DCF139039B6483375A62 /* Pods-SharedAux.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		D6801F072863BB3800C4F21B /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D659F4622874A93500D87322 /* Queue.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -73,6 +93,9 @@
 				D6EC24DF28602B47004A3A2F /* WelcomeView.swift */,
 				D68879B928666639005063F1 /* PlaybackBarView.swift */,
 				D68879BD286761D0005063F1 /* PlaybackFullScreenView.swift */,
+				D694B6FF2872100300B9B414 /* HomeView.swift */,
+				D6CEC1FE287231A6002E97FC /* JoinQueueView.swift */,
+				D6CEC200287283D3002E97FC /* QueueControlView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -90,6 +113,8 @@
 			children = (
 				D69426B028565C8700D91973 /* SharedAux */,
 				D69426AF28565C8700D91973 /* Products */,
+				2E2FCD834B6448C26F89689E /* Pods */,
+				0234B3BA2E0AE39362D5A24A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -104,25 +129,16 @@
 		D69426B028565C8700D91973 /* SharedAux */ = {
 			isa = PBXGroup;
 			children = (
+				D694B6FD287006E900B9B414 /* GoogleService-Info.plist */,
 				D6801F092863BB5700C4F21B /* ViewModels */,
 				D6801F082863BB3E00C4F21B /* Views */,
 				D6801F072863BB3800C4F21B /* Models */,
-				D63B41B5285688A000F90428 /* Frameworks */,
 				D69426C128565CEA00D91973 /* Info.plist */,
 				D69426B128565C8700D91973 /* SharedAuxApp.swift */,
 				D69426B528565C8A00D91973 /* Assets.xcassets */,
-				D69426B728565C8A00D91973 /* Preview Content */,
 				D69426CB28567E2B00D91973 /* SharedAux-Bridging-Header.h */,
 			);
 			path = SharedAux;
-			sourceTree = "<group>";
-		};
-		D69426B728565C8A00D91973 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				D69426B828565C8A00D91973 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -132,9 +148,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D69426BC28565C8A00D91973 /* Build configuration list for PBXNativeTarget "SharedAux" */;
 			buildPhases = (
+				C3663878D1B6569380F146D4 /* [CP] Check Pods Manifest.lock */,
 				D69426AA28565C8700D91973 /* Sources */,
 				D69426AB28565C8700D91973 /* Frameworks */,
 				D69426AC28565C8700D91973 /* Resources */,
+				B58680A39EA13A426BC34CC7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -183,22 +201,68 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D69426B928565C8A00D91973 /* Preview Assets.xcassets in Resources */,
 				D69426B628565C8A00D91973 /* Assets.xcassets in Resources */,
+				D694B6FE287006EA00B9B414 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B58680A39EA13A426BC34CC7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SharedAux/Pods-SharedAux-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SharedAux/Pods-SharedAux-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SharedAux/Pods-SharedAux-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C3663878D1B6569380F146D4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SharedAux-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D69426AA28565C8700D91973 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D694B7002872100300B9B414 /* HomeView.swift in Sources */,
 				D652D512285E707200B139C2 /* CreateQueueView.swift in Sources */,
 				D6EC24E028602B47004A3A2F /* WelcomeView.swift in Sources */,
 				D69426B428565C8700D91973 /* ContentView.swift in Sources */,
+				D6CEC1FF287231A6002E97FC /* JoinQueueView.swift in Sources */,
 				D6F8CB7F285C06D500C2AD23 /* ViewModel.swift in Sources */,
+				D6CEC201287283D3002E97FC /* QueueControlView.swift in Sources */,
+				D659F4632874A93500D87322 /* Queue.swift in Sources */,
 				D68879BE286761D0005063F1 /* PlaybackFullScreenView.swift in Sources */,
 				D6EC24DE285FBC55004A3A2F /* SearchView.swift in Sources */,
 				D69426B228565C8700D91973 /* SharedAuxApp.swift in Sources */,
@@ -329,12 +393,13 @@
 		};
 		D69426BD28565C8A00D91973 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07189CC31FB131F8FE4D7CEF /* Pods-SharedAux.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"SharedAux/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6FPV73NHLV;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -361,18 +426,19 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "SharedAux/SharedAux-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		D69426BE28565C8A00D91973 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7699DCF139039B6483375A62 /* Pods-SharedAux.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"SharedAux/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6FPV73NHLV;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -399,7 +465,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "SharedAux/SharedAux-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
