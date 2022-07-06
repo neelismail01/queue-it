@@ -18,8 +18,15 @@ struct CreateQueueView: View {
             Spacer()
             NavigationLink(destination: QueueControlView()) {
                 Text("Continue")
+                    .onTapGesture {
+                        Task {
+                            await viewModel.createFirebaseQueue(nameOfQueue: queueName)
+                        }
+                    }
+                    .disabled(queueName.isEmpty)
             }
         }
+        .navigationTitle("Create A Queue")
         .padding()
     }
 }

@@ -8,7 +8,21 @@
 import SwiftUI
 
 struct JoinQueueView: View {
+    @State private var score = 0
+    
+    let formatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
+    
     var body: some View {
-        Text("Join Queue")
+        VStack {
+            TextField("Enter your score", value: $score, formatter: formatter)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+            
+            Text("Your score was \(score).")
+        }
     }
 }
