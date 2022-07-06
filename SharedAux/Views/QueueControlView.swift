@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct QueueControlView: View {
+    @EnvironmentObject var viewModel: ViewModel
+    
     var body: some View {
         VStack {
             NavigationLink(destination: SearchView()) {
@@ -15,5 +17,8 @@ struct QueueControlView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            viewModel.fetchFirebaseQueue()
+        }
     }
 }
