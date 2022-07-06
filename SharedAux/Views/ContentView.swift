@@ -12,22 +12,25 @@ struct ContentView: View {
     @EnvironmentObject var viewModel: ViewModel
     
     var body: some View {
-            NavigationView {
-                if viewModel.musicAuthorizationStatus == .authorized {
-                    WelcomeView()
-                } else {
-                    ZStack {
-                        HomeView()
-                        // PlaybackBarView()
-                    }
+        NavigationView {
+            if viewModel.applicationState == .unauthorized {
+                WelcomeView()
+            } else if viewModel.applicationState == .readForQueue {
+                HomeView()
+            } else if viewModel.applicationState == .queueOwner {
+                ZStack {
+                    QueueControlView()
+                    PlaybackBarView()
                 }
+                .zIndex(1)
+                .sheet(isPresented: $viewModel.isPlayerViewPresented) {
+                    PlaybackFullScreenView()
+                        .zIndex(2)
+                }
+            } else {
+                QueueControlView()
             }
-            .zIndex(1)
-            .sheet(isPresented: $viewModel.isPlayerViewPresented, content: {
-                PlaybackFullScreenView()
-                    .zIndex(2)
-            })
-
+        }
     }
 }
 
