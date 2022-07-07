@@ -50,7 +50,7 @@ struct SearchView: View {
                 }
                 .onTapGesture {
                     Task {
-                        await viewModel.addSongToFirebaseQueue(songId: song.id.rawValue)
+                        await viewModel.addSongToFirebaseQueue(song)
                     }
                 }
             }
