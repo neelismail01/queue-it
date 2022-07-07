@@ -8,21 +8,20 @@
 import SwiftUI
 
 struct JoinQueueView: View {
-    @State private var score = 0
-    
-    let formatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter
-    }()
+    @EnvironmentObject var viewModel: ViewModel
+    @State private var joinCode = ""
     
     var body: some View {
         VStack {
-            TextField("Enter your score", value: $score, formatter: formatter)
+            TextField("Enter a code", text: $joinCode)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-            
-            Text("Your score was \(score).")
+                .submitLabel(.join)
+                .onSubmit {
+                    Task {
+                        await viewModel.joinFirebaseQueue(joinCode: joinCode)
+                    }
+                }
         }
     }
 }
