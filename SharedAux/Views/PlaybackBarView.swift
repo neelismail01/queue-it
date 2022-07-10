@@ -20,7 +20,7 @@ struct PlaybackBarView: View {
     }
     
     var songDetails: some View {
-        let currentSong = viewModel.currentlyPlayingItem
+        let currentSong = viewModel.musicPlayer.nowPlayingItem
         return HStack {
             if let song = currentSong {
                 if let songArtwork = song.artwork?.image(at: CGSize(width: 40, height: 40)) {
@@ -54,7 +54,7 @@ struct PlaybackBarView: View {
     
     var playPauseButton: some View {
         return HStack {
-            if viewModel.currentlyPlayingItem == nil {
+            if viewModel.musicPlayer.nowPlayingItem == nil {
                 Image(systemName: "play.fill")
                     .font(.system(size: 22))
                     .foregroundColor(.gray)
@@ -79,45 +79,49 @@ struct PlaybackBarView: View {
     }
     
     var songTimeline: some View {
-        let currentSong = viewModel.currentlyPlayingItem
+        let currentSong = viewModel.musicPlayer.nowPlayingItem
         return HStack {
             if let song = currentSong {
                 Rectangle()
-                    .fill(.purple)
+                    .fill(.blue)
                     .frame(width: UIScreen.main.bounds.size.width * (songTime / song.playbackDuration),
                            height: 3)
             }
             Rectangle()
-                .fill(.white)
+                .fill(Color(UIColor.clear))
                 .frame(height: 3)
         }
-        .background(.white)
+        .background(Color(UIColor.clear))
     }
     
     var body: some View {
         VStack {
-            Spacer(minLength: 0)
-            VStack {
-                songTimeline
+            songTimeline
+            Spacer()
+            HStack {
+                songDetails
                 Spacer()
-                HStack {
-                    songDetails
-                    Spacer()
+                if viewModel.applicationState == .queueOwner {
                     playPauseButton
                 }
-                .padding(.leading)
-                .padding(.trailing)
             }
-            .frame(width: UIScreen.main.bounds.size.width, height: 60)
-            .foregroundColor(.black)
-            .background(.white)
-            .onTapGesture {
+            .padding(.leading)
+            .padding(.trailing)
+        }
+        .frame(width: UIScreen.main.bounds.size.width, height: 60)
+        .background(Color(UIColor.systemGray6))
+        .onTapGesture {
+            if viewModel.applicationState == .queueOwner {
                 viewModel.isPlayerViewPresented = true
             }
         }
         .onReceive(viewModel.timer) { _ in
-            viewModel.checkCurrentlyPlayingSong()
-            songTime = viewModel.musicPlayer.currentPlaybackTime
+            Task {
+                await viewModel.checkCurrentlyPlayingSong()
+                await MainActor.run {
+                    songTime = viewModel.musicPlayer.currentPlaybackTime
+                }
+            }
         }
     }
 }

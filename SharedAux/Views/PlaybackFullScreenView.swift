@@ -15,7 +15,7 @@ struct PlaybackFullScreenView: View {
     let screenWidth = UIScreen.main.bounds.size.width - 40
     
     var albumArt: some View {
-        let currentSong = viewModel.currentlyPlayingItem
+        let currentSong = viewModel.musicPlayer.nowPlayingItem
         return VStack {
             if let song = currentSong, let songArtwork = song.artwork?.image(at: CGSize(width: screenWidth, height: screenWidth)) {
                 Image(uiImage: songArtwork)
@@ -37,7 +37,7 @@ struct PlaybackFullScreenView: View {
     
     var songDetails: some View {
         VStack {
-            if let currentSong = viewModel.currentlyPlayingItem {
+            if let currentSong = viewModel.musicPlayer.nowPlayingItem {
                 VStack {
                     Text(currentSong.title ?? "Unknown Song")
                         .font(.system(size: 24, weight: .semibold))
@@ -56,7 +56,7 @@ struct PlaybackFullScreenView: View {
     }
     
     var songTimelineSlider: some View {
-        let song = viewModel.currentlyPlayingItem
+        let song = viewModel.musicPlayer.nowPlayingItem
         let musicPlayer = viewModel.musicPlayer
         
         return VStack {
@@ -95,10 +95,17 @@ struct PlaybackFullScreenView: View {
     var playbackControls: some View {
         HStack {
             Spacer()
-            Image(systemName: "backward.end.fill")
-                .font(.system(size: 24))
+            Button {
+                Task {
+                    await viewModel.goToPreviousSong()
+                }
+            } label: {
+                Image(systemName: "backward.end.fill")
+                    .font(.system(size: 24))
+            }
+            .buttonStyle(PlainButtonStyle())
             Spacer()
-            if viewModel.currentlyPlayingItem == nil{
+            if viewModel.musicPlayer.nowPlayingItem == nil{
                 Image(systemName: "play.circle.fill")
                     .font(.system(size: 64))
             } else if viewModel.isSongPlaying {
@@ -122,7 +129,9 @@ struct PlaybackFullScreenView: View {
             }
             Spacer()
             Button {
-                viewModel.playNextSong()
+                Task {
+                    await viewModel.goToNextSong()
+                }
             } label: {
                 Image(systemName: "forward.end.fill")
                     .font(.system(size: 24))
@@ -142,8 +151,12 @@ struct PlaybackFullScreenView: View {
         .padding()
         .onReceive(viewModel.timer) { _ in
             if !isEditing {
-                viewModel.checkCurrentlyPlayingSong()
-                songTime = viewModel.musicPlayer.currentPlaybackTime
+                Task {
+                    await viewModel.checkCurrentlyPlayingSong()
+                    await MainActor.run {
+                        songTime = viewModel.musicPlayer.currentPlaybackTime
+                    }
+                }
             }
         }
     }
