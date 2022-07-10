@@ -11,39 +11,39 @@ import MediaPlayer
 import Firebase
 import FirebaseFirestoreSwift
 
+// TODO: Add current song index to firebase state and synchronize it with relevant views
+
 enum ApplicationState {
     case unauthorized
-    case readForQueue
+    case readyForQueue
     case queueOwner
     case queueContributor
 }
 
+enum UpdateCurrentSongIndexDirection {
+    case forward
+    case backward
+}
+
 class ViewModel: ObservableObject {
+    private var db = Firestore.firestore()
+    private var firebaseDocId: String?
     var musicPlayer = MPMusicPlayerController.applicationMusicPlayer
     var timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
-
+    
+    // Application and authorization state
     @Published var applicationState: ApplicationState = .unauthorized
     @Published var musicAuthorizationStatus: MusicAuthorization.Status = .notDetermined
+    
+    // Search results
     @Published var songSearchResults: [Song] = []
     
-    @Published var isPlayerViewPresented = false
+    // Queue information
+    @Published var activeQueue: Queue?
     
-    func loginWithAppleMusic(_ status: MusicAuthorization.Status) {
-        musicAuthorizationStatus = status
-        if status == .authorized {
-            applicationState = .readForQueue
-        }
-    }
-    
-    
-    private var db = Firestore.firestore()
-    var firebaseDocId: String?
-    var activeQueue: Queue?
-    
-    var currentSongQueueIndex: Int = -1
-    
-    @Published var currentlyPlayingItem: MPMediaItem?
+    // Music playback
     @Published var isSongPlaying = false
+    @Published var isPlayerViewPresented = false
     
     func createFirebaseQueue(nameOfQueue: String) async {
         do {
@@ -53,7 +53,11 @@ class ViewModel: ObservableObject {
             let lowerBound = randomString.index(randomString.startIndex, offsetBy: 0)
             let upperBound = randomString.index(randomString.startIndex, offsetBy: 6)
             let joinCode = randomString[lowerBound..<upperBound].uppercased()
-            let data = Queue(name: nameOfQueue, joinCode: joinCode, songs: [], active: true)
+            let data = Queue(name: nameOfQueue,
+                             joinCode: joinCode,
+                             songAdditions: [],
+                             currentSongIndex: 0,
+                             active: true)
             
             try docRef.setData(from: data)
             self.firebaseDocId = docRef.documentID
@@ -65,7 +69,9 @@ class ViewModel: ObservableObject {
     
     func joinFirebaseQueue(joinCode: String) async {
         do {
-            let query = db.collection("Queues").whereField("joinCode", isEqualTo: joinCode)
+            let query = db.collection("Queues")
+                .whereField("joinCode", isEqualTo: joinCode)
+                .whereField("active", isEqualTo: true)
             let snapshot = try await query.getDocuments()
             if snapshot.count == 0 {
                 print("no queue with this code exists")
@@ -73,66 +79,153 @@ class ViewModel: ObservableObject {
             }
             
             self.firebaseDocId = snapshot.documents[0].documentID
-            self.applicationState = .queueContributor
+            await MainActor.run {
+                self.applicationState = .queueContributor
+            }
         } catch {
             print("An error occurred while joining a firebase queue: \(error)")
         }
     }
     
-    func fetchFirebaseQueue() {
-        guard let docId = firebaseDocId else {
-            print("firebaseDocId is undefined")
+    func leaveQueue() async {
+        guard let firebaseDocId = firebaseDocId else {
             return
         }
         
-        db.collection("Queues").document(docId).addSnapshotListener { snapshot, error in
-            self.activeQueue = try? snapshot?.data(as: Queue.self)
+        if applicationState == .queueOwner {
+            do {
+                musicPlayer.pause()
+                isSongPlaying = false
+                try await db.collection("Queues").document(firebaseDocId).updateData(
+                    ["active": false])
+            } catch {
+                print("An error occurred while changing the state of this queue: \(error)")
+            }
+        }
+        
+        await MainActor.run {
+            applicationState = .readyForQueue
         }
     }
     
-    func addSongToFirebaseQueue(songId: String) async {
-        guard let docId = firebaseDocId else {
-            print("firebaseDocId is undefined")
+    func fetchFirebaseQueue() {
+        guard let firebaseDocId = firebaseDocId else {
+            return
+        }
+        
+        db.collection("Queues").document(firebaseDocId).addSnapshotListener { snapshot, error in
+            if error != nil {
+                print("An error occurred fetching this queue from firebase: \(error.debugDescription)")
+                return
+            }
+            
+            guard let snapshot = snapshot else {
+                return
+            }
+            
+            do {
+                self.activeQueue = try snapshot.data(as: Queue.self)
+                if let activeQueue = self.activeQueue {
+                    if activeQueue.active == false {
+                        self.applicationState = .readyForQueue
+                    }
+                }
+            } catch {
+                print("An error occurred while reading the firebase snapshot: \(error)")
+            }
+        }
+    }
+    
+    func addSongToFirebaseQueue(_ song: Song) async {
+        guard let firebaseDocId = firebaseDocId else {
             return
         }
         
         do {
-            try await db.collection("Queues").document(docId).updateData(
-                ["songs": FieldValue.arrayUnion([songId])])
+            let songAddition = SongAddition(addedBy: "Neel Ismail",
+                                             songId: song.id.rawValue,
+                                             songName: song.title,
+                                             songArtist: song.artistName,
+                                             songArtworkUrl: song.artwork?.url(width: 50, height: 50)?.absoluteString ?? "")
             
-            if applicationState == .queueOwner && musicPlayer.nowPlayingItem == nil {
-                await playNextSong()
-            }
+            let encodedSongAddition = try Firestore.Encoder().encode(songAddition)
+            
+            try await db.collection("Queues").document(firebaseDocId).updateData(
+                ["songAdditions": FieldValue.arrayUnion([encodedSongAddition])])
+            
         } catch {
             print("An error occurred while adding a song to your firebase queue: \(error)")
         }
     }
     
-    @MainActor func checkCurrentlyPlayingSong() {
-        guard let currentSong = musicPlayer.nowPlayingItem else {
+    @MainActor func checkCurrentlyPlayingSong() async {
+        guard let songAdditions = activeQueue?.songAdditions else {
             return
         }
         
-        if currentSong.playbackDuration - musicPlayer.currentPlaybackTime < 1 {
-            playNextSong()
+        if let nowPlayingItem = musicPlayer.nowPlayingItem {
+            if nowPlayingItem.playbackDuration - musicPlayer.currentPlaybackTime < 1 {
+                await goToNextSong()
+            }
+        } else if songAdditions.count > 0 {
+            await playSong()
         }
     }
     
-    @MainActor func playNextSong() {
-        guard let songQueue = activeQueue?.songs else {
+    func goToNextSong() async {
+        guard let songAdditions = activeQueue?.songAdditions,
+              let currentSongIndex = activeQueue?.currentSongIndex else {
             return
         }
         
-        if songQueue.count > 0 {
-            if currentSongQueueIndex < songQueue.count - 1 {
-                currentSongQueueIndex += 1
-            } else {
-                currentSongQueueIndex = 0
-            }
-            musicPlayer.setQueue(with: [songQueue[currentSongQueueIndex]])
-            musicPlayer.play()
-            currentlyPlayingItem = musicPlayer.nowPlayingItem
-            isSongPlaying = true
+        if currentSongIndex < songAdditions.count - 1 {
+            await updateCurrentSongIndex(currentSongIndex, songAdditions, .forward)
+            await playSong()
+        }
+    }
+    
+    func goToPreviousSong() async {
+        guard let songAdditions = activeQueue?.songAdditions,
+              let currentSongIndex = activeQueue?.currentSongIndex else {
+            return
+        }
+        
+        if currentSongIndex > 0 {
+            await updateCurrentSongIndex(currentSongIndex, songAdditions, .backward)
+            await playSong()
+        }
+    }
+    
+    func updateCurrentSongIndex(_ currentSongIndex: Int, _ songAdditions: [SongAddition], _ direction: UpdateCurrentSongIndexDirection) async {
+        guard let firebaseDocId = firebaseDocId else {
+            return
+        }
+        
+        let updatedSongIndex = direction == .forward ? currentSongIndex + 1 : currentSongIndex - 1
+
+        do {
+            try await db.collection("Queues").document(firebaseDocId).updateData(
+                ["currentSongIndex": updatedSongIndex])
+        } catch {
+            print("An error occurred while updating the current song index: \(error)")
+        }
+    }
+    
+    @MainActor func playSong() async {
+        guard let songAdditions = activeQueue?.songAdditions,
+              let currentSongIndex = activeQueue?.currentSongIndex else {
+            return
+        }
+        
+        musicPlayer.setQueue(with: [songAdditions[currentSongIndex].songId])
+        musicPlayer.play()
+        isSongPlaying = true
+    }
+    
+    func loginWithAppleMusic(_ status: MusicAuthorization.Status) {
+        musicAuthorizationStatus = status
+        if status == .authorized {
+            applicationState = .readyForQueue
         }
     }
     
@@ -141,7 +234,6 @@ class ViewModel: ObservableObject {
             if !query.isEmpty {
                 let searchRequest = MusicCatalogSearchRequest(term: query, types: [Song.self])
                 let response = try await searchRequest.response()
-                print(response.songs)
                 await MainActor.run {
                     self.songSearchResults = response.songs.compactMap { $0 }
                 }
