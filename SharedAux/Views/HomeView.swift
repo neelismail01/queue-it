@@ -13,41 +13,33 @@ struct HomeView: View {
     @EnvironmentObject var viewModel: ViewModel
     
     var body: some View {
-        ZStack {
-            gradient
-            VStack {
-                Spacer()
-                NavigationLink(destination: CreateQueueView()) {
-                    ZStack {
-                        Circle()
-                            .foregroundColor(.white)
-                            .frame(width: 200, height: 200, alignment: .center)
-                        Text("Create a Queue")
-                            .font(.system(size: 20, weight: .bold))
-                    }
-                }
-                Spacer()
-                NavigationLink(destination: JoinQueueView()) {
-                    Text("Join a Queue")
-                        .background(.white)
-                        .cornerRadius(.infinity)
-                }
-                Spacer()
+        VStack {
+            Spacer()
+            Text("Shared Aux")
+                .font(.system(size: 40, weight: .bold))
+                .padding(2.5)
+            Text("Curate Music Together")
+                .font(.system(size: 16, weight: .light))
+            Spacer()
+            NavigationLink(destination: CreateQueueView()) {
+                Text("Create a Queue")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .foregroundColor(.white)
+                    .background(.blue)
+                    .cornerRadius(5)
             }
+            NavigationLink(destination: JoinQueueView()) {
+                Text("Join a Queue")
+                    .font(.system(size: 16))
+                    .frame(maxWidth: .infinity)
+                    .padding()
+            }
+            Spacer()
         }
-    }
-    
-    private var gradient: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color(red: (130.0 / 255.0), green: (109.0 / 255.0), blue: (204.0 / 255.0)),
-                Color(red: (130.0 / 255.0), green: (130.0 / 255.0), blue: (211.0 / 255.0)),
-                Color(red: (131.0 / 255.0), green: (160.0 / 255.0), blue: (218.0 / 255.0))
-            ]),
-            startPoint: .leading,
-            endPoint: .trailing
-        )
-        .flipsForRightToLeftLayoutDirection(false)
-        .ignoresSafeArea()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
     }
 }

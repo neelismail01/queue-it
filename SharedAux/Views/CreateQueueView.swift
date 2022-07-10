@@ -13,20 +13,31 @@ struct CreateQueueView: View {
     @State var queueName = ""
     
     var body: some View {
-        VStack() {
-            TextField("Name your queue", text: $queueName)
+        VStack {
+            TextField("Name your queue",text: $queueName)
+                .padding(.all, 10)
+                .frame(height: 50)
+                .background(Color(UIColor.systemGray6))
+                .cornerRadius(10)
+                .font(.system(size: 16))
             Spacer()
-            NavigationLink(destination: QueueControlView()) {
+            Button {
+                Task {
+                    await viewModel.createFirebaseQueue(nameOfQueue: queueName)
+                }
+            } label: {
                 Text("Continue")
-                    .onTapGesture {
-                        Task {
-                            await viewModel.createFirebaseQueue(nameOfQueue: queueName)
-                        }
-                    }
-                    .disabled(queueName.isEmpty)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .foregroundColor(.white)
+                    .background(.blue)
+                    .cornerRadius(5)
+                    .font(.system(size: 16, weight: .bold))
             }
+            .disabled(queueName.isEmpty)
         }
-        .navigationTitle("Create A Queue")
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
+        .navigationTitle("Create Queue")
     }
 }
