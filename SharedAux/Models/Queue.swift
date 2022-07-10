@@ -14,6 +14,7 @@ struct Queue: Codable {
     var name: String
     var joinCode: String
     var songAdditions: [SongAddition]
+    var currentSongIndex: Int
     var active: Bool
 }
 
