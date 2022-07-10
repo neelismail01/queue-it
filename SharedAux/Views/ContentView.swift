@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MediaPlayer
 
 struct ContentView: View {
     @EnvironmentObject var viewModel: ViewModel
@@ -15,18 +14,8 @@ struct ContentView: View {
         NavigationView {
             if viewModel.applicationState == .unauthorized {
                 WelcomeView()
-            } else if viewModel.applicationState == .readForQueue {
+            } else if viewModel.applicationState == .readyForQueue {
                 HomeView()
-            } else if viewModel.applicationState == .queueOwner {
-                ZStack {
-                    QueueControlView()
-                    PlaybackBarView()
-                }
-                .zIndex(1)
-                .sheet(isPresented: $viewModel.isPlayerViewPresented) {
-                    PlaybackFullScreenView()
-                        .zIndex(2)
-                }
             } else {
                 QueueControlView()
             }
