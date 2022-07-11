@@ -10,6 +10,7 @@ import SwiftUI
 struct QueueControlView: View {
     @EnvironmentObject var viewModel: ViewModel
     @State private var showDialog = false
+
     
     var leaveQueueButton: some View {
         let dialogText = viewModel.applicationState == .queueOwner ? "End this queue" : "Leave this queue"
@@ -38,63 +39,109 @@ struct QueueControlView: View {
                 Image(systemName: "plus")
                 Text("Add Song")
             }
-            .font(.system(size: 12))
+            .frame(maxWidth: .infinity)
+            .font(.system(size: 14).bold())
             .padding(10)
             .foregroundColor(.white)
             .background(.blue)
-            .cornerRadius(.infinity)
+            .cornerRadius(5)
         }
+    }
+    
+    var inviteButton: some View {
+        HStack {
+            Image(systemName: "square.and.arrow.up")
+            Text("Invite")
+        }
+        .frame(maxWidth: .infinity)
+        .font(.system(size: 14).bold())
+        .padding(10)
+        .foregroundColor(.white)
+        .background(.blue)
+        .cornerRadius(5)
     }
     
     var nonEmptyQueue: some View {
         let songAdditions = viewModel.activeQueue?.songAdditions ?? []
         let songAdditionsWithIndex = songAdditions.enumerated().map({ $0 })
-        return List {
-            Section {
-                ForEach(songAdditionsWithIndex, id: \.element.id) { index, song in
-                    HStack {
-                        AsyncImage(url: URL(string: song.songArtworkUrl))
-                            .frame(width: 50, height: 50, alignment: .center)
-                        VStack(alignment: .leading) {
-                            Text(song.songName)
-                                .font(.system(size: 16, weight: .semibold))
-                            Text(song.songArtist)
-                                .font(.system(size: 14, weight: .light))
-                                .foregroundColor(.gray)
+        let currentSongIndex = viewModel.activeQueue?.currentSongIndex
+        return VStack(alignment: .leading) {
+            Text("Queue")
+                .font(.system(size: 18).bold())
+                .padding([.top, .leading])
+                .padding(.bottom, 5)
+            
+            ScrollViewReader { proxy in
+                ScrollView {
+                    ForEach(songAdditionsWithIndex, id: \.element.id) { index, song in
+                        HStack {
+                            AsyncImage(url: URL(string: song.songArtworkUrl))
+                                .frame(width: 50, height: 50, alignment: .center)
+                                .cornerRadius(5)
+                            VStack(alignment: .leading) {
+                                Spacer()
+                                if index == currentSongIndex {
+                                    Text(song.songName)
+                                        .font(.system(size: 14))
+                                        .foregroundColor(.blue)
+                                } else {
+                                    Text(song.songName)
+                                        .font(.system(size: 14))
+                                }
+                                Spacer()
+                                Text(song.songArtist)
+                                    .font(.system(size: 14, weight: .light))
+                                    .foregroundColor(.gray)
+                                Spacer()
+                            }
+                            Spacer()
+                            if index == currentSongIndex {
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(.blue)
+                                    .frame(width: 5, height: 50)
+                            }
                         }
-                        Spacer()
+                        .padding(.leading)
+                        .padding([.top], 5)
+                        .listRowSeparator(.hidden)
+                        .id(index)
                     }
                 }
-            } header: {
-                Text("Queue:")
-                    .font(.headline)
+                .onChange(of: viewModel.activeQueue?.currentSongIndex) { _ in
+                    if let scrollIndex = viewModel.activeQueue?.currentSongIndex {
+                        withAnimation {
+                            proxy.scrollTo(scrollIndex, anchor: .top)
+                        }
+                    }
+                }
             }
         }
-        .listStyle(PlainListStyle())
+        .padding(.bottom)
     }
     
     var emptyQueue: some View {
-        return
-        VStack {
-            Text("The queue is currently empty.")
-                .font(.system(size: 16).bold())
-                .padding(2.5)
-            addSongButton
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        return Text("The queue is currently empty.")
+            .font(.system(size: 16).bold())
+            .frame(maxHeight: .infinity, alignment: .center)
+            .padding(2.5)
     }
     
     var body: some View {
-        let queueName = viewModel.activeQueue?.name ?? "Queue"
+        let queueName = viewModel.activeQueue?.name ?? ""
         let songAdditions = viewModel.activeQueue?.songAdditions ?? []
-        HStack {
+        VStack {
+            HStack {
+                inviteButton
+                addSongButton
+            }
+            .padding()
             if songAdditions.isEmpty {
                 emptyQueue
             } else {
                 nonEmptyQueue
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .safeAreaInset(edge: .bottom, alignment: .center) {
             PlaybackBarView()
                 .zIndex(1)
@@ -109,11 +156,6 @@ struct QueueControlView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 leaveQueueButton
-            }
-        })
-        .toolbar(content: {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                addSongButton
             }
         })
         .onAppear {
