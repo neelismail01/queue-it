@@ -135,6 +135,7 @@ struct QueueControlView: View {
                 addSongButton
             }
             .padding()
+            
             if songAdditions.isEmpty {
                 emptyQueue
             } else {
