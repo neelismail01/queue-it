@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import MusicKit
+
+struct SearchResults {
+    var songs: [Song]
+    var albums: [Album]
+    var artists: [Artist]
+}
