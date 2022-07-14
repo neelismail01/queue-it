@@ -11,8 +11,6 @@ import MediaPlayer
 import Firebase
 import FirebaseFirestoreSwift
 
-// TODO: Add current song index to firebase state and synchronize it with relevant views
-
 enum ApplicationState {
     case unauthorized
     case readyForQueue
@@ -36,7 +34,7 @@ class ViewModel: ObservableObject {
     @Published var musicAuthorizationStatus: MusicAuthorization.Status = .notDetermined
     
     // Search results
-    @Published var songSearchResults: [Song] = []
+    @Published var searchResults: SearchResults?
     
     // Queue information
     @Published var activeQueue: Queue?
@@ -78,8 +76,8 @@ class ViewModel: ObservableObject {
                 return
             }
             
-            self.firebaseDocId = snapshot.documents[0].documentID
             await MainActor.run {
+                self.firebaseDocId = snapshot.documents[0].documentID
                 self.applicationState = .queueContributor
             }
         } catch {
@@ -232,16 +230,44 @@ class ViewModel: ObservableObject {
     func searchAppleMusicCatalog(for query: String) async {
         do {
             if !query.isEmpty {
-                let searchRequest = MusicCatalogSearchRequest(term: query, types: [Song.self])
+                var searchRequest = MusicCatalogSearchRequest(term: query, types: [Song.self, Album.self, Artist.self])
+                
+                searchRequest.limit = 3
+                
                 let response = try await searchRequest.response()
+                
+                let songResults = response.songs.compactMap { $0 }
+                let albumResults = response.albums.compactMap { $0 }
+                let artistResults = response.artists.compactMap { $0 }
+                
                 await MainActor.run {
-                    self.songSearchResults = response.songs.compactMap { $0 }
+                    self.searchResults = SearchResults(songs: songResults,
+                                                       albums: albumResults,
+                                                       artists: artistResults)
                 }
-            } else {
-                songSearchResults = []
             }
         } catch {
             print("Music Catalog Search error: \(error)")
+        }
+    }
+    
+    func getArtistInformation(_ artist: Artist) async throws -> Artist {
+        do {
+            let detailedArtist = try await artist.with([.topSongs, .albums])
+            return detailedArtist
+        } catch {
+            print("An error occurred while retrieving the artist's information: \(error)")
+            throw error
+        }
+    }
+    
+    func getAlbumInformation(_ album: Album) async throws -> Album {
+        do {
+            let detailedAlbum = try await album.with([.tracks])
+            return detailedAlbum
+        } catch {
+            print("An error occurred while retrieving the album's information: \(error)")
+            throw error
         }
     }
 }
