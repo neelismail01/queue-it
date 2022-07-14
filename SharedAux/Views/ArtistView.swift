@@ -6,15 +6,87 @@
 //
 
 import SwiftUI
+import MusicKit
 
-struct ArtistView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
+enum ViewState {
+    case loading
+    case ready
+    case error
 }
 
-struct ArtistView_Previews: PreviewProvider {
-    static var previews: some View {
-        ArtistView()
+struct ArtistView: View {
+    
+    @EnvironmentObject var viewModel: ViewModel
+    @State var detailedArtistInfo: Artist?
+    @State var state: ViewState = .loading
+    let artist: Artist
+    
+    var body: some View {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        return VStack {
+            if state == .loading {
+                Text("Loading...")
+            } else {
+                ScrollView {
+                    HStack {
+                        Text("Top Songs")
+                        Spacer()
+                        NavigationLink {
+                            ArtistTopSongsView(topSongs: Array(detailedArtistInfo!.topSongs ?? []))
+                        } label: {
+                            Text("View All")
+                        }
+
+                    }
+                    ForEach(detailedArtistInfo!.topSongs ?? []) { song in
+                        HStack {
+                            AsyncImage(url: song.artwork?.url(width: 50, height: 50))
+                                .frame(width: 50, height: 50, alignment: .center)
+                                .cornerRadius(5)
+                            VStack(alignment: .leading) {
+                                Text(song.title)
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .lineLimit(1)
+                                Text("Song - \(song.artistName)")
+                                    .font(.system(size: 14, weight: .light))
+                                    .lineLimit(1)
+                                    .foregroundColor(.gray)
+                            }
+                            Spacer()
+                            Image(systemName: "plus.circle")
+                        }
+                    }
+                    ScrollView(.horizontal) {
+                        ForEach(detailedArtistInfo!.albums ?? []) { album in
+                            NavigationLink {
+                                AlbumView(album: album)
+                            } label: {
+                                VStack {
+                                    AsyncImage(url: album.artwork?.url(width: 150, height: 150))
+                                        .frame(width: 150, height: 150)
+                                        .cornerRadius(10)
+                                    Text(album.title)
+                                    if let releaseDate = album.releaseDate {
+                                        Text(dateFormatter.string(from: releaseDate))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+        .onAppear {
+            Task {
+                do {
+                    self.detailedArtistInfo = try await viewModel.getArtistInformation(artist)
+                    self.state = .ready
+                } catch {
+                    self.state = .error
+                }
+            }
+        }
     }
 }
