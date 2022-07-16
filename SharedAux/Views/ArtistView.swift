@@ -23,52 +23,57 @@ struct ArtistView: View {
     
     var body: some View {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
+        dateFormatter.dateFormat = "yyyy"
         return VStack {
             if state == .loading {
                 Text("Loading...")
             } else {
                 ScrollView {
-                    HStack {
-                        Text("Top Songs")
-                        Spacer()
-                        NavigationLink {
-                            ArtistTopSongsView(topSongs: Array(detailedArtistInfo!.topSongs ?? []))
-                        } label: {
-                            Text("View All")
-                        }
-
-                    }
-                    ForEach(detailedArtistInfo!.topSongs ?? []) { song in
+                    if let topSongs = detailedArtistInfo?.topSongs {
                         HStack {
-                            AsyncImage(url: song.artwork?.url(width: 50, height: 50))
-                                .frame(width: 50, height: 50, alignment: .center)
-                                .cornerRadius(5)
-                            VStack(alignment: .leading) {
-                                Text(song.title)
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .lineLimit(1)
-                                Text("Song - \(song.artistName)")
-                                    .font(.system(size: 14, weight: .light))
-                                    .lineLimit(1)
-                                    .foregroundColor(.gray)
-                            }
+                            Text("Top Songs")
+                                .font(.system(size: 16, weight: .semibold))
                             Spacer()
-                            Image(systemName: "plus.circle")
+                            NavigationLink {
+                                ArtistTopSongsView(topSongs: Array(detailedArtistInfo!.topSongs ?? []))
+                            } label: {
+                                Text("View All")
+                            }
+
+                        }
+                        ForEach(topSongs.count > 5 ? Array(topSongs[...5]) : Array(topSongs)) { song in
+                            HStack {
+                                AsyncImage(url: song.artwork?.url(width: 50, height: 50))
+                                    .frame(width: 50, height: 50, alignment: .center)
+                                    .cornerRadius(5)
+                                VStack(alignment: .leading) {
+                                    Text(song.title)
+                                        .font(.system(size: 16, weight: .semibold))
+                                        .lineLimit(1)
+                                    Text("Song - \(song.artistName)")
+                                        .font(.system(size: 14, weight: .light))
+                                        .lineLimit(1)
+                                        .foregroundColor(.gray)
+                                }
+                                Spacer()
+                                Image(systemName: "plus.circle")
+                            }
                         }
                     }
                     ScrollView(.horizontal) {
-                        ForEach(detailedArtistInfo!.albums ?? []) { album in
-                            NavigationLink {
-                                AlbumView(album: album)
-                            } label: {
-                                VStack {
-                                    AsyncImage(url: album.artwork?.url(width: 150, height: 150))
-                                        .frame(width: 150, height: 150)
-                                        .cornerRadius(10)
-                                    Text(album.title)
-                                    if let releaseDate = album.releaseDate {
-                                        Text(dateFormatter.string(from: releaseDate))
+                        HStack {
+                            ForEach(artist.albums ?? []) { album in
+                                NavigationLink {
+                                    AlbumView(album: album)
+                                } label: {
+                                    VStack {
+                                        AsyncImage(url: album.artwork?.url(width: 150, height: 150))
+                                            .frame(width: 150, height: 150)
+                                            .cornerRadius(10)
+                                        Text(album.title)
+                                        if let releaseDate = album.releaseDate {
+                                            Text(dateFormatter.string(from: releaseDate))
+                                        }
                                     }
                                 }
                             }
@@ -88,5 +93,6 @@ struct ArtistView: View {
                 }
             }
         }
+        .navigationBarTitle(artist.name)
     }
 }
