@@ -9,7 +9,11 @@ import SwiftUI
 
 struct LoadingApplicationView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Shared Aux")
+            .font(.system(size: 40, weight: .bold))
+            .padding(2.5)
+        Text("Curate Music Together")
+            .font(.system(size: 16, weight: .light))
     }
 }
 
