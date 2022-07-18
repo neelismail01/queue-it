@@ -25,4 +25,5 @@ struct SongAddition: Identifiable, Codable {
     var songName: String
     var songArtist: String
     var songArtworkUrl: String
+    var isExplicit: Bool
 }
