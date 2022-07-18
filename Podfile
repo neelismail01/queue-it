@@ -8,4 +8,5 @@ target 'SharedAux' do
   # Pods for SharedAux
   pod 'Firebase/Firestore'
   pod 'FirebaseFirestoreSwift'
+  pod 'SDWebImageSwiftUI'
 end
