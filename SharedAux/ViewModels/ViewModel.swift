@@ -12,26 +12,21 @@ import Firebase
 import FirebaseFirestoreSwift
 
 enum ApplicationState {
+    case loadingApplication
     case unauthorized
     case readyForQueue
     case queueOwner
     case queueContributor
 }
 
-enum UpdateCurrentSongIndexDirection {
-    case forward
-    case backward
-}
-
 class ViewModel: ObservableObject {
     private var db = Firestore.firestore()
     private var firebaseDocId: String?
-    var musicPlayer = MPMusicPlayerController.applicationMusicPlayer
-    var timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    var musicPlayer = MPMusicPlayerController.applicationQueuePlayer
+    var checkSongTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
     // Application and authorization state
-    @Published var applicationState: ApplicationState = .unauthorized
-    @Published var musicAuthorizationStatus: MusicAuthorization.Status = .notDetermined
+    @Published var applicationState: ApplicationState = .loadingApplication
     
     // Search results
     @Published var searchResults: SearchResults?
@@ -75,7 +70,7 @@ class ViewModel: ObservableObject {
                 print("no queue with this code exists")
                 return
             }
-            
+                        
             await MainActor.run {
                 self.firebaseDocId = snapshot.documents[0].documentID
                 self.applicationState = .queueContributor
@@ -134,18 +129,12 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func addSongToFirebaseQueue(_ song: Song) async {
+    func addSongToFirebaseQueue(_ songAddition: SongAddition) async {
         guard let firebaseDocId = firebaseDocId else {
             return
         }
         
         do {
-            let songAddition = SongAddition(addedBy: "Neel Ismail",
-                                             songId: song.id.rawValue,
-                                             songName: song.title,
-                                             songArtist: song.artistName,
-                                             songArtworkUrl: song.artwork?.url(width: 50, height: 50)?.absoluteString ?? "")
-            
             let encodedSongAddition = try Firestore.Encoder().encode(songAddition)
             
             try await db.collection("Queues").document(firebaseDocId).updateData(
@@ -156,75 +145,89 @@ class ViewModel: ObservableObject {
         }
     }
     
-    @MainActor func checkCurrentlyPlayingSong() async {
+    func checkSongStatus() async {
         guard let songAdditions = activeQueue?.songAdditions else {
             return
         }
-        
-        if let nowPlayingItem = musicPlayer.nowPlayingItem {
-            if nowPlayingItem.playbackDuration - musicPlayer.currentPlaybackTime < 1 {
-                await goToNextSong()
+                        
+        do {
+            if songAdditions.count > 0 && !musicPlayer.isPreparedToPlay {
+                musicPlayer.setQueue(with: [songAdditions[0].songId])
+                try await musicPlayer.prepareToPlay()
+                musicPlayer.play()
+                await MainActor.run {
+                    isSongPlaying = true
+                }
             }
-        } else if songAdditions.count > 0 {
-            await playSong()
+            
+            if musicPlayer.currentPlaybackTime < 1 {
+                await updateCurrentSongIndex()
+            } else if isSongPlaying {
+                musicPlayer.play()
+            }
+        } catch {
+            print("An error occurred checking the song status: \(error)")
         }
     }
     
     func goToNextSong() async {
-        guard let songAdditions = activeQueue?.songAdditions,
-              let currentSongIndex = activeQueue?.currentSongIndex else {
-            return
-        }
-        
-        if currentSongIndex < songAdditions.count - 1 {
-            await updateCurrentSongIndex(currentSongIndex, songAdditions, .forward)
-            await playSong()
-        }
+        musicPlayer.skipToNextItem()
+        await updateCurrentSongIndex()
     }
     
     func goToPreviousSong() async {
-        guard let songAdditions = activeQueue?.songAdditions,
-              let currentSongIndex = activeQueue?.currentSongIndex else {
+        musicPlayer.skipToPreviousItem()
+        await updateCurrentSongIndex()
+    }
+    
+    func insertNextSongIntoApplicationQueue() {
+        guard let songAdditions = activeQueue?.songAdditions else {
             return
         }
-        
-        if currentSongIndex > 0 {
-            await updateCurrentSongIndex(currentSongIndex, songAdditions, .backward)
-            await playSong()
+                
+        if musicPlayer.indexOfNowPlayingItem < songAdditions.count - 1 {
+            let nextSongIndex = musicPlayer.indexOfNowPlayingItem + 1
+            let nextSongId = songAdditions[nextSongIndex].songId
+            
+            musicPlayer.perform { queue in
+                if !queue.items.contains(where: { item in item.playbackStoreID == nextSongId }) {
+                    let descriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: [nextSongId])
+                    queue.insert(descriptor, after: queue.items[queue.items.count - 1])
+                }
+            } completionHandler: { _ , error in
+                if error != nil{
+                    print("An error occurred while adding the next item to the music queue: \(error.debugDescription)")
+                }
+            }
         }
     }
     
-    func updateCurrentSongIndex(_ currentSongIndex: Int, _ songAdditions: [SongAddition], _ direction: UpdateCurrentSongIndexDirection) async {
+    func updateCurrentSongIndex() async {
         guard let firebaseDocId = firebaseDocId else {
             return
         }
         
-        let updatedSongIndex = direction == .forward ? currentSongIndex + 1 : currentSongIndex - 1
-
         do {
             try await db.collection("Queues").document(firebaseDocId).updateData(
-                ["currentSongIndex": updatedSongIndex])
+                ["currentSongIndex": musicPlayer.indexOfNowPlayingItem])
         } catch {
             print("An error occurred while updating the current song index: \(error)")
         }
     }
     
-    @MainActor func playSong() async {
-        guard let songAdditions = activeQueue?.songAdditions,
-              let currentSongIndex = activeQueue?.currentSongIndex else {
-            return
-        }
-        
-        musicPlayer.setQueue(with: [songAdditions[currentSongIndex].songId])
-        musicPlayer.play()
-        isSongPlaying = true
-    }
-    
-    func loginWithAppleMusic(_ status: MusicAuthorization.Status) {
-        musicAuthorizationStatus = status
-        if status == .authorized {
-            applicationState = .readyForQueue
-        }
+    func requestAppleMusicAuthorization() async {
+        Task.detached(operation: {
+            let authorizationStatus = await MusicAuthorization.request()
+            if authorizationStatus == .authorized {
+                await MainActor.run {
+                    self.applicationState = .readyForQueue
+                }
+            } else {
+                await MainActor.run {
+                    self.applicationState = .unauthorized
+                }
+            }
+        })
     }
     
     func searchAppleMusicCatalog(for query: String) async {
