@@ -139,7 +139,9 @@ struct PlaybackFullScreenView: View {
             .buttonStyle(PlainButtonStyle())
             Spacer()
         }
+        .padding(.bottom, 10)
     }
+    
     
     var body: some View {
         VStack {
@@ -149,10 +151,10 @@ struct PlaybackFullScreenView: View {
             playbackControls
         }
         .padding()
-        .onReceive(viewModel.timer) { _ in
+        .onReceive(viewModel.checkSongTimer) { _ in
             if !isEditing {
                 Task {
-                    await viewModel.checkCurrentlyPlayingSong()
+                    await viewModel.checkSongStatus()
                     await MainActor.run {
                         songTime = viewModel.musicPlayer.currentPlaybackTime
                     }

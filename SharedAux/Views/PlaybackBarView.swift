@@ -16,7 +16,7 @@ struct PlaybackBarView: View {
         Image(systemName: "music.note")
             .frame(width: 40, height: 40, alignment: .center)
             .background(.gray)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 5))
     }
     
     var songDetails: some View {
@@ -28,7 +28,7 @@ struct PlaybackBarView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 40, height: 40, alignment: .center)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
                 } else {
                     albumImagePlaceholder
                 }
@@ -115,9 +115,12 @@ struct PlaybackBarView: View {
                 viewModel.isPlayerViewPresented = true
             }
         }
-        .onReceive(viewModel.timer) { _ in
+        .onReceive(viewModel.checkSongTimer) { _ in
             Task {
-                await viewModel.checkCurrentlyPlayingSong()
+                if viewModel.applicationState == .queueOwner {
+                    await viewModel.checkSongStatus()
+                }
+                
                 await MainActor.run {
                     songTime = viewModel.musicPlayer.currentPlaybackTime
                 }
