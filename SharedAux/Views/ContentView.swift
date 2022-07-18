@@ -12,12 +12,19 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            if viewModel.applicationState == .unauthorized {
+            if viewModel.applicationState == .loadingApplication {
+                LoadingApplicationView()
+            } else if viewModel.applicationState == .unauthorized {
                 WelcomeView()
             } else if viewModel.applicationState == .readyForQueue {
                 HomeView()
             } else {
                 QueueControlView()
+            }
+        }
+        .onAppear {
+            Task {
+                await viewModel.requestAppleMusicAuthorization()
             }
         }
     }
