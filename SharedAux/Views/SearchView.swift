@@ -8,6 +8,7 @@
 import SwiftUI
 import MusicKit
 import MediaPlayer
+import SDWebImageSwiftUI
 
 enum SearchDestination {
     case artist
@@ -22,7 +23,11 @@ struct SearchView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            searchResults
+            if !query.isEmpty {
+                searchResults
+            } else {
+                
+            }
         }
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always))
         .onChange(of: query) { newValue in
@@ -46,64 +51,80 @@ struct SearchView: View {
         artistResults = artistResults.count > 2 ? Array(artistResults.prefix(upTo: 2)) : artistResults
         albumResults = albumResults.count > 2 ? Array(albumResults.prefix(upTo: 2)) : albumResults
         
-        return List {
-            ForEach(songResults, id: \.id) { song in
-                HStack {
-                    AsyncImage(url: song.artwork?.url(width: 50, height: 50))
-                        .frame(width: 50, height: 50, alignment: .center)
-                        .cornerRadius(5)
-                    VStack(alignment: .leading) {
-                        Text(song.title)
-                            .font(.system(size: 16, weight: .semibold))
-                            .lineLimit(1)
-                        Text("Song - \(song.artistName)")
-                            .font(.system(size: 14, weight: .light))
-                            .lineLimit(1)
-                            .foregroundColor(.gray)
+        return VStack {
+            List {
+                Section {
+                    ForEach(songResults, id: \.id) { song in
+                        TrackRow(song: song)
                     }
-                    Spacer()
-                    Image(systemName: "plus.circle")
+                } header: {
+                    Text("Songs")
                 }
-                .onTapGesture {
-                    Task {
-                        await viewModel.addSongToFirebaseQueue(song)
+                
+                Section {
+                    ForEach(artistResults, id: \.id) { artist in
+                        NavigationLink {
+                            ArtistView(artist: artist)
+                        } label: {
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Image(systemName: "music.mic")
+                                        .frame(width: 50, height: 50)
+                                        .cornerRadius(5)
+                                        .background(Color(UIColor.systemGray6))
+                                    Text(artist.name)
+                                        .font(.system(size: 16, weight: .semibold))
+                                        .lineLimit(1)
+                                }
+                            }
+                            .frame(height: 50)
+                        }
+                        
                     }
+                } header: {
+                    Text("Artists")
+                }
+                
+                Section {
+                    ForEach(albumResults, id: \.id) { album in
+                        NavigationLink {
+                            AlbumView(album: album)
+                        } label: {
+                            HStack {
+                                WebImage(url: album.artwork?.url(width: 100, height: 100))
+                                    .placeholder(
+                                        Image(systemName: "music.note")
+                                    )
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .cornerRadius(5)
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        Text(album.title)
+                                            .font(.system(size: 16, weight: .semibold))
+                                            .lineLimit(1)
+                                        if album.contentRating == .explicit {
+                                            Text("E")
+                                                .frame(width: 15, height: 15)
+                                                .font(.system(size: 8))
+                                                .foregroundColor(Color(UIColor.systemBackground))
+                                                .background(Color(UIColor.systemGray))
+                                                .cornerRadius(2.5)
+                                        }
+                                    }
+                                    Text(album.artistName)
+                                        .font(.system(size: 14, weight: .light))
+                                        .lineLimit(1)
+                                        .foregroundColor(.gray)
+                                }
+                                .frame(height: 50)
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Albums")
                 }
             }
-            
-            ForEach(artistResults, id: \.id) { artist in
-                NavigationLink {
-                    ArtistView(artist: artist)
-                } label: {
-                    VStack(alignment: .leading) {
-                        Text(artist.name)
-                            .font(.system(size: 16, weight: .semibold))
-                            .lineLimit(1)
-                        Text("Artist")
-                            .font(.system(size: 14, weight: .light))
-                            .foregroundColor(.gray)
-                    }
-                }
-
-            }
-            
-            ForEach(albumResults, id: \.id) { album in
-                NavigationLink {
-                    AlbumView(album: album)
-                } label: {
-                    VStack(alignment: .leading) {
-                        Text(album.title)
-                            .font(.system(size: 16, weight: .semibold))
-                            .lineLimit(1)
-                        Text("Album - \(album.artistName)")
-                            .font(.system(size: 14, weight: .light))
-                            .lineLimit(1)
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-                               
-                               
         }
         .listStyle(PlainListStyle())
     }
