@@ -22,13 +22,13 @@ struct WelcomeView: View {
             Text("Curate Music Together")
                 .font(.system(size: 16, weight: .light))
             Spacer()
-            secondaryExplanatoryText
+            Text("Open Settings to grant Shared Aux access to your Apple Music")
                 .foregroundColor(.primary)
                 .font(.system(size: 16, weight: .light))
                 .multilineTextAlignment(.center)
             Spacer()
             Button(action: handleButtonPressed) {
-                buttonText
+                Text("Open Settings")
                     .font(.system(size: 16, weight: .bold))
             }
             .frame(maxWidth: .infinity)
@@ -40,14 +40,6 @@ struct WelcomeView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-    
-    private var secondaryExplanatoryText: Text {
-        Text("Open Settings to grant Shared Aux access to your Apple Music")
-    }
-    
-    private var buttonText: Text {
-        Text("Open Settings")
     }
     
     private func handleButtonPressed() {
