@@ -8,21 +8,31 @@
 import Foundation
 import MediaPlayer
 
+/*
+    This extension handles interactions with the MediaPlayer queue
+*/
 extension ViewModel {
+    
     func checkSongStatus() async {
+        
         if let nowPlayingItem = musicPlayer.nowPlayingItem {
             if nowPlayingItem.playbackDuration - musicPlayer.currentPlaybackTime < 1 {
                 await manageQueue()
-                await updateCurrentSongIndex()
             }
+        }
+        
+        if musicPlayer.currentPlaybackTime < 1 {
+            await updateCurrentSongIndex()
         }
         
         await MainActor.run {
             isSongPlaying = musicPlayer.playbackState == .playing
         }
+        
     }
 
     func goToNextSong() async {
+        
         guard let songAdditions = activeQueue?.songAdditions else {
             return
         }
@@ -32,26 +42,32 @@ extension ViewModel {
         }
         
         musicPlayer.skipToNextItem()
+        
     }
 
     func goToPreviousSong() {
-        musicPlayer.skipToPreviousItem()
+        
+        if musicPlayer.currentPlaybackTime < 5 {
+            musicPlayer.skipToPreviousItem()
+        } else {
+            musicPlayer.skipToBeginning()
+        }
+        
     }
 
     func manageQueue() async {
+        
         guard let songAdditions = activeQueue?.songAdditions else {
             return
         }
         
         if !queueBeingManaged {
-            
             await MainActor.run {
                 queueBeingManaged = true
             }
             
             if songAdditions.count > 0 && !musicPlayer.isPreparedToPlay {
-                let firstSongId = songAdditions[0].songId
-                await initializeQueue(with: firstSongId)
+                await initializeQueue(with: songAdditions[0].songId)
             } else if musicPlayer.indexOfNowPlayingItem < songAdditions.count - 1 {
                 await addNextSongToQueue()
             }
@@ -60,22 +76,23 @@ extension ViewModel {
                 queueBeingManaged = false
             }
         }
+        
     }
 
-    func initializeQueue(with songAddition: String) async {
+    func initializeQueue(with songId: String) async {
+        
         do {
-            musicPlayer.setQueue(with: [songAddition])
+            musicPlayer.setQueue(with: [songId])
             try await musicPlayer.prepareToPlay()
             musicPlayer.play()
-            await MainActor.run {
-                isSongPlaying = true
-            }
         } catch {
             print("An error occurred while initializing the queue: \(error)")
         }
+        
     }
 
     func addNextSongToQueue() async {
+        
         guard let songAdditions = activeQueue?.songAdditions else {
             return
         }

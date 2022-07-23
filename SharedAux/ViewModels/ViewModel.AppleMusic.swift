@@ -8,11 +8,14 @@
 import Foundation
 import MusicKit
 
-// This extension handles interactions with the Apple Music API
+/*
+    This extension handles interactions with the Apple Music APIs
+*/
 extension ViewModel {
     
     func requestAppleMusicAuthorization() async {
-        Task.detached(operation: {
+        
+        Task.detached {
             let authorizationStatus = await MusicAuthorization.request()
             if authorizationStatus == .authorized {
                 await MainActor.run {
@@ -23,14 +26,18 @@ extension ViewModel {
                     self.applicationState = .unauthorized
                 }
             }
-        })
+        }
+        
     }
     
     func searchAppleMusicCatalog(for query: String) async {
+        
         do {
             if !query.isEmpty {
-                var searchRequest = MusicCatalogSearchRequest(term: query, types: [Song.self, Album.self, Artist.self])
-                
+                var searchRequest = MusicCatalogSearchRequest(term: query,
+                                                              types: [Song.self,
+                                                                      Album.self,
+                                                                      Artist.self])
                 searchRequest.limit = 3
                 
                 let response = try await searchRequest.response()
@@ -40,17 +47,19 @@ extension ViewModel {
                 let artistResults = response.artists.compactMap { $0 }
                 
                 await MainActor.run {
-                    self.searchResults = SearchResults(songs: songResults,
-                                                       albums: albumResults,
-                                                       artists: artistResults)
+                    searchResults = SearchResults(songs: songResults,
+                                                  albums: albumResults,
+                                                  artists: artistResults)
                 }
             }
         } catch {
             print("Music Catalog Search error: \(error)")
         }
+        
     }
     
     func getArtistInformation(_ artist: Artist) async throws -> Artist {
+        
         do {
             let detailedArtist = try await artist.with([.topSongs, .albums])
             return detailedArtist
@@ -58,9 +67,11 @@ extension ViewModel {
             print("An error occurred while retrieving the artist's information: \(error)")
             throw error
         }
+        
     }
     
     func getAlbumInformation(_ album: Album) async throws -> Album {
+        
         do {
             let detailedAlbum = try await album.with([.tracks])
             return detailedAlbum
@@ -68,5 +79,6 @@ extension ViewModel {
             print("An error occurred while retrieving the album's information: \(error)")
             throw error
         }
+        
     }
 }
