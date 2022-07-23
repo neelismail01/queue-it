@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+enum ApplicationState {
+    case loadingApplication
+    case unauthorized
+    case readyForQueue
+    case queueOwner
+    case queueContributor
+}
