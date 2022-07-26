@@ -1,14 +1,14 @@
 # Queue It
 
 ## Technologies
-The user interface of this application was built with Swift and SwiftUI and integrated with Apple's MusicKit API to provide access to its music catalogue. Persistant storage and real-time queue syncing was achieved using Firebase Firestore.
+The user interface of this application was built with **Swift** and **SwiftUI**. Persistant storage and real-time queue syncing was achieved using **Firebase Firestore**. Queue It integrated with MusicKit to offer Apple Music subscribers search and playback functionality to its catalogue of 50+ million songs.
 
 ## Features:
-  * Connect your Apple Music account to gain access to Apple Music's catalogue of 50+ million songs and play music
-  * Create queues and invite others to join and contribute
-  * Search songs, artists, and albums through a search preview 
+  * Create queues and invite others to contribute in real-time
+  * Search Apple Music's vast catalogue by song title, artist, and album
+  * Explore top songs and albums by an artist through artist profile pages
   * Play music from any connected device controlled by the queue's owner
-  * Control music playback using familiar controls such as play/pause, skip, and play previous
+  * Control music playback using familiar controls such as play/pause, skip to next, and skip to previous
   
 ## Preview!
 [Queue-It-Home](https://user-images.githubusercontent.com/23081661/181113251-ed6630bf-48b6-40aa-8fd2-8854842cb18f.PNG)
