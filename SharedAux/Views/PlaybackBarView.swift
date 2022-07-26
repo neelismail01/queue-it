@@ -10,39 +10,26 @@ import SwiftUI
 struct PlaybackBarView: View {
     
     @EnvironmentObject var viewModel: ViewModel
+    
     @State var songTime = 0.0
     
-    var albumImagePlaceholder: some View {
-        Image(systemName: "music.note")
-            .frame(width: 40, height: 40, alignment: .center)
-            .background(.gray)
-            .clipShape(RoundedRectangle(cornerRadius: 5))
-    }
-    
     var songDetails: some View {
-        let currentSong = viewModel.musicPlayer.nowPlayingItem
-        return HStack {
-            if let song = currentSong {
-                if let songArtwork = song.artwork?.image(at: CGSize(width: 40, height: 40)) {
-                    Image(uiImage: songArtwork)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 40, height: 40, alignment: .center)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                } else {
-                    albumImagePlaceholder
-                }
-                VStack(alignment: .leading) {
-                    Text(currentSong?.title ?? "Unknown Song")
-                        .font(.system(size: 14, weight: .semibold))
-                    Text(currentSong?.artist ?? "Unknown Artist")
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundColor(.gray)
-                }
-                .padding(.leading, 5)
-                .padding(.trailing)
+        HStack {
+            if let activeQueue = viewModel.activeQueue,
+               let songIndex = viewModel.activeQueue?.currentSongIndex {
+                let currentSong = activeQueue.songAdditions[songIndex]
+                
+                AlbumImage(frameWidth: 40,
+                           frameHeight: 40,
+                           url: URL(string: currentSong.songArtworkUrlSmall))
+                
+                MusicItemDetails(mainTitle: currentSong.songName,
+                                 artistName: currentSong.songArtist,
+                                 isExplicit: currentSong.isExplicit)
             } else {
-                albumImagePlaceholder
+                AlbumImage(frameWidth: 40,
+                           frameHeight: 40,
+                           url: nil)
                 Text("Not Playing")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.gray)
@@ -53,38 +40,30 @@ struct PlaybackBarView: View {
     }
     
     var playPauseButton: some View {
-        return HStack {
-            if viewModel.musicPlayer.nowPlayingItem == nil {
+        Button {
+            if viewModel.isSongPlaying {
+                viewModel.musicPlayer.pause()
+            } else {
+                viewModel.musicPlayer.play()
+            }
+        } label: {
+            if viewModel.isSongPlaying {
+                Image(systemName: "pause.fill")
+                    .font(.system(size: 22))
+            } else {
                 Image(systemName: "play.fill")
                     .font(.system(size: 22))
-                    .foregroundColor(.gray)
-            } else if viewModel.isSongPlaying {
-                Button {
-                    viewModel.musicPlayer.pause()
-                    viewModel.isSongPlaying = false
-                } label: {
-                    Image(systemName: "pause.fill")
-                        .font(.system(size: 22))
-                }
-            } else {
-                Button {
-                    viewModel.musicPlayer.play()
-                    viewModel.isSongPlaying = true
-                } label: {
-                    Image(systemName: "play.fill")
-                        .font(.system(size: 22))
-                }
             }
         }
+        .disabled(viewModel.musicPlayer.nowPlayingItem == nil)
     }
     
     var songTimeline: some View {
-        let currentSong = viewModel.musicPlayer.nowPlayingItem
-        return HStack {
-            if let song = currentSong {
+        HStack {
+            if let nowPlayingItem = viewModel.musicPlayer.nowPlayingItem {
                 Rectangle()
                     .fill(.blue)
-                    .frame(width: UIScreen.main.bounds.size.width * (songTime / song.playbackDuration),
+                    .frame(width: UIScreen.main.bounds.size.width * (songTime / nowPlayingItem.playbackDuration),
                            height: 3)
             }
             Rectangle()
@@ -105,8 +84,7 @@ struct PlaybackBarView: View {
                     playPauseButton
                 }
             }
-            .padding(.leading)
-            .padding(.trailing)
+            .padding([.leading, .trailing])
         }
         .frame(width: UIScreen.main.bounds.size.width, height: 60)
         .background(Color(UIColor.systemGray6))
@@ -117,10 +95,6 @@ struct PlaybackBarView: View {
         }
         .onReceive(viewModel.checkSongTimer) { _ in
             Task {
-                if viewModel.applicationState == .queueOwner {
-                    await viewModel.checkSongStatus()
-                }
-                
                 await MainActor.run {
                     songTime = viewModel.musicPlayer.currentPlaybackTime
                 }

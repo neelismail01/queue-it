@@ -8,6 +8,7 @@
 import Foundation
 import Firebase
 import FirebaseFirestoreSwift
+import MusicKit
 
 /*
     This extension handles interactions with Firebase
@@ -15,12 +16,10 @@ import FirebaseFirestoreSwift
 extension ViewModel {
     
     private func createJoinCode() -> String {
-        
         let randomString = UUID().uuidString
         let lowerBound = randomString.index(randomString.startIndex, offsetBy: 0)
         let upperBound = randomString.index(randomString.startIndex, offsetBy: 6)
         return randomString[lowerBound..<upperBound].uppercased()
-        
     }
     
     func createFirebaseQueue(queueName: String) async {
@@ -31,7 +30,7 @@ extension ViewModel {
             let data = Queue(name: queueName,
                              joinCode: joinCode,
                              songAdditions: [],
-                             currentSongIndex: 0,
+                             currentSongIndex: nil,
                              isActive: true)
             
             try docRef.setData(from: data)
@@ -43,7 +42,6 @@ extension ViewModel {
     }
     
     func joinFirebaseQueue(joinCode: String) async {
-        
         do {
             let query = db.collection("Queues")
                 .whereField("joinCode", isEqualTo: joinCode)
@@ -60,11 +58,9 @@ extension ViewModel {
         } catch {
             print("An error occurred while joining a firebase queue: \(error)")
         }
-        
     }
     
     func fetchFirebaseQueue() {
-        
         guard let firebaseDocId = firebaseDocId else {
             return
         }
@@ -90,44 +86,50 @@ extension ViewModel {
                 print("An error occurred while reading the firebase snapshot: \(error)")
             }
         }
-        
     }
     
-    func addSongToFirebaseQueue(_ songAddition: SongAddition) async {
+    func addSongToFirebaseQueue(songId: String,
+                                songName: String,
+                                songArtist: String,
+                                songArtworkUrlSmall: String,
+                                songArtworkUrlLarge: String,
+                                isExplicit: Bool) async {
         
         guard let firebaseDocId = firebaseDocId else {
             return
         }
         
         do {
+            let songAddition = SongAddition(songId: songId,
+                                            songName: songName,
+                                            songArtist: songArtist,
+                                            songArtworkUrlSmall: songArtworkUrlSmall,
+                                            songArtworkUrlLarge: songArtworkUrlLarge,
+                                            isExplicit: isExplicit)
+            
             let encodedSongAddition = try Firestore.Encoder().encode(songAddition)
             
             try await db.collection("Queues").document(firebaseDocId).updateData(
                 ["songAdditions": FieldValue.arrayUnion([encodedSongAddition])])
-            
         } catch {
             print("An error occurred while adding a song to your firebase queue: \(error)")
         }
-        
     }
     
     func updateCurrentSongIndex() async {
-        
         guard let firebaseDocId = firebaseDocId else {
             return
         }
-        
+                
         do {
             try await db.collection("Queues").document(firebaseDocId).updateData(
                 ["currentSongIndex": musicPlayer.indexOfNowPlayingItem])
         } catch {
             print("An error occurred while updating the current song index: \(error)")
         }
-        
     }
     
     func leaveQueue() async {
-        
         guard let firebaseDocId = firebaseDocId else {
             return
         }
@@ -143,8 +145,13 @@ extension ViewModel {
         }
         
         await MainActor.run {
+            self.firebaseDocId = nil
+            activeQueue = nil
+            searchResults = nil
+            isSongPlaying = false
+            isPlayerViewPresented = false
+            queueBeingManaged = false
             applicationState = .readyForQueue
         }
-        
     }
 }

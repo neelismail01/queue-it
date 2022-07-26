@@ -12,12 +12,18 @@
 		D659F4632874A93500D87322 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D659F4622874A93500D87322 /* Queue.swift */; };
 		D68879BA28666639005063F1 /* PlaybackBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68879B928666639005063F1 /* PlaybackBarView.swift */; };
 		D68879BE286761D0005063F1 /* PlaybackFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68879BD286761D0005063F1 /* PlaybackFullScreenView.swift */; };
+		D68C886B288C762F0014CADA /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C886A288C762F0014CADA /* ApplicationState.swift */; };
+		D68C886F288C7ACC0014CADA /* ViewModel.AppleMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C886E288C7ACC0014CADA /* ViewModel.AppleMusic.swift */; };
+		D68C8871288C7AF10014CADA /* ViewModel.Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C8870288C7AF10014CADA /* ViewModel.Firebase.swift */; };
+		D68C8873288C7B7D0014CADA /* ViewModel.Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C8872288C7B7D0014CADA /* ViewModel.Queue.swift */; };
+		D68C8875288C8F900014CADA /* SongAddition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C8874288C8F900014CADA /* SongAddition.swift */; };
+		D68C8877288C91A20014CADA /* ScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C8876288C91A20014CADA /* ScreenState.swift */; };
+		D68C8879288D03620014CADA /* SharedViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C8878288D03620014CADA /* SharedViews.swift */; };
 		D69426B228565C8700D91973 /* SharedAuxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69426B128565C8700D91973 /* SharedAuxApp.swift */; };
 		D69426B428565C8700D91973 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69426B328565C8700D91973 /* ContentView.swift */; };
 		D69426B628565C8A00D91973 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D69426B528565C8A00D91973 /* Assets.xcassets */; };
 		D694B6FE287006EA00B9B414 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D694B6FD287006E900B9B414 /* GoogleService-Info.plist */; };
 		D694B7002872100300B9B414 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D694B6FF2872100300B9B414 /* HomeView.swift */; };
-		D697978628837DA700F5935A /* TrackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D697978528837DA700F5935A /* TrackRow.swift */; };
 		D697978E2884ECEA00F5935A /* LoadingApplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D697978D2884ECEA00F5935A /* LoadingApplicationView.swift */; };
 		D69AD242287FDCEE00DAE6E9 /* ArtistTopSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69AD241287FDCEE00DAE6E9 /* ArtistTopSongsView.swift */; };
 		D6CEC1FF287231A6002E97FC /* JoinQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEC1FE287231A6002E97FC /* JoinQueueView.swift */; };
@@ -38,15 +44,21 @@
 		D659F4622874A93500D87322 /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		D68879B928666639005063F1 /* PlaybackBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackBarView.swift; sourceTree = "<group>"; };
 		D68879BD286761D0005063F1 /* PlaybackFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackFullScreenView.swift; sourceTree = "<group>"; };
+		D68C886A288C762F0014CADA /* ApplicationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationState.swift; sourceTree = "<group>"; };
+		D68C886E288C7ACC0014CADA /* ViewModel.AppleMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.AppleMusic.swift; sourceTree = "<group>"; };
+		D68C8870288C7AF10014CADA /* ViewModel.Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.Firebase.swift; sourceTree = "<group>"; };
+		D68C8872288C7B7D0014CADA /* ViewModel.Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.Queue.swift; sourceTree = "<group>"; };
+		D68C8874288C8F900014CADA /* SongAddition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongAddition.swift; sourceTree = "<group>"; };
+		D68C8876288C91A20014CADA /* ScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenState.swift; sourceTree = "<group>"; };
+		D68C8878288D03620014CADA /* SharedViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViews.swift; sourceTree = "<group>"; };
+		D68C887D288E50600014CADA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D69426AE28565C8700D91973 /* SharedAux.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SharedAux.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D69426B128565C8700D91973 /* SharedAuxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAuxApp.swift; sourceTree = "<group>"; };
 		D69426B328565C8700D91973 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D69426B528565C8A00D91973 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D69426C128565CEA00D91973 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D69426CB28567E2B00D91973 /* SharedAux-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SharedAux-Bridging-Header.h"; sourceTree = "<group>"; };
 		D694B6FD287006E900B9B414 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D694B6FF2872100300B9B414 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		D697978528837DA700F5935A /* TrackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRow.swift; sourceTree = "<group>"; };
 		D697978D2884ECEA00F5935A /* LoadingApplicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingApplicationView.swift; sourceTree = "<group>"; };
 		D69AD241287FDCEE00DAE6E9 /* ArtistTopSongsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTopSongsView.swift; sourceTree = "<group>"; };
 		D6CEC1FE287231A6002E97FC /* JoinQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinQueueView.swift; sourceTree = "<group>"; };
@@ -93,6 +105,9 @@
 			children = (
 				D659F4622874A93500D87322 /* Queue.swift */,
 				D6F76D2D287D253700FE0972 /* SearchResults.swift */,
+				D68C886A288C762F0014CADA /* ApplicationState.swift */,
+				D68C8874288C8F900014CADA /* SongAddition.swift */,
+				D68C8876288C91A20014CADA /* ScreenState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -100,20 +115,20 @@
 		D6801F082863BB3E00C4F21B /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D69426B328565C8700D91973 /* ContentView.swift */,
-				D652D511285E707200B139C2 /* CreateQueueView.swift */,
 				D6EC24DD285FBC55004A3A2F /* SearchView.swift */,
-				D6EC24DF28602B47004A3A2F /* WelcomeView.swift */,
+				D6F76D2F287E5FDA00FE0972 /* ArtistView.swift */,
+				D69AD241287FDCEE00DAE6E9 /* ArtistTopSongsView.swift */,
+				D6F76D31287E5FED00FE0972 /* AlbumView.swift */,
+				D6CEC200287283D3002E97FC /* QueueControlView.swift */,
 				D68879B928666639005063F1 /* PlaybackBarView.swift */,
 				D68879BD286761D0005063F1 /* PlaybackFullScreenView.swift */,
-				D694B6FF2872100300B9B414 /* HomeView.swift */,
+				D652D511285E707200B139C2 /* CreateQueueView.swift */,
 				D6CEC1FE287231A6002E97FC /* JoinQueueView.swift */,
-				D6CEC200287283D3002E97FC /* QueueControlView.swift */,
-				D6F76D2F287E5FDA00FE0972 /* ArtistView.swift */,
-				D6F76D31287E5FED00FE0972 /* AlbumView.swift */,
-				D69AD241287FDCEE00DAE6E9 /* ArtistTopSongsView.swift */,
-				D697978528837DA700F5935A /* TrackRow.swift */,
+				D694B6FF2872100300B9B414 /* HomeView.swift */,
+				D69426B328565C8700D91973 /* ContentView.swift */,
+				D6EC24DF28602B47004A3A2F /* WelcomeView.swift */,
 				D697978D2884ECEA00F5935A /* LoadingApplicationView.swift */,
+				D68C8878288D03620014CADA /* SharedViews.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -122,6 +137,9 @@
 			isa = PBXGroup;
 			children = (
 				D6F8CB7E285C06D500C2AD23 /* ViewModel.swift */,
+				D68C886E288C7ACC0014CADA /* ViewModel.AppleMusic.swift */,
+				D68C8870288C7AF10014CADA /* ViewModel.Firebase.swift */,
+				D68C8872288C7B7D0014CADA /* ViewModel.Queue.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -151,10 +169,10 @@
 				D6801F092863BB5700C4F21B /* ViewModels */,
 				D6801F082863BB3E00C4F21B /* Views */,
 				D6801F072863BB3800C4F21B /* Models */,
-				D69426C128565CEA00D91973 /* Info.plist */,
 				D69426B128565C8700D91973 /* SharedAuxApp.swift */,
 				D69426B528565C8A00D91973 /* Assets.xcassets */,
 				D69426CB28567E2B00D91973 /* SharedAux-Bridging-Header.h */,
+				D68C887D288E50600014CADA /* Info.plist */,
 			);
 			path = SharedAux;
 			sourceTree = "<group>";
@@ -274,23 +292,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				D694B7002872100300B9B414 /* HomeView.swift in Sources */,
+				D68C886B288C762F0014CADA /* ApplicationState.swift in Sources */,
 				D652D512285E707200B139C2 /* CreateQueueView.swift in Sources */,
 				D69AD242287FDCEE00DAE6E9 /* ArtistTopSongsView.swift in Sources */,
 				D6EC24E028602B47004A3A2F /* WelcomeView.swift in Sources */,
 				D6F76D32287E5FED00FE0972 /* AlbumView.swift in Sources */,
 				D69426B428565C8700D91973 /* ContentView.swift in Sources */,
 				D6CEC1FF287231A6002E97FC /* JoinQueueView.swift in Sources */,
-				D697978628837DA700F5935A /* TrackRow.swift in Sources */,
+				D68C8873288C7B7D0014CADA /* ViewModel.Queue.swift in Sources */,
 				D697978E2884ECEA00F5935A /* LoadingApplicationView.swift in Sources */,
 				D6F76D2E287D253700FE0972 /* SearchResults.swift in Sources */,
 				D6F8CB7F285C06D500C2AD23 /* ViewModel.swift in Sources */,
+				D68C8877288C91A20014CADA /* ScreenState.swift in Sources */,
 				D6CEC201287283D3002E97FC /* QueueControlView.swift in Sources */,
+				D68C8875288C8F900014CADA /* SongAddition.swift in Sources */,
 				D659F4632874A93500D87322 /* Queue.swift in Sources */,
 				D6F76D30287E5FDA00FE0972 /* ArtistView.swift in Sources */,
 				D68879BE286761D0005063F1 /* PlaybackFullScreenView.swift in Sources */,
+				D68C886F288C7ACC0014CADA /* ViewModel.AppleMusic.swift in Sources */,
+				D68C8871288C7AF10014CADA /* ViewModel.Firebase.swift in Sources */,
 				D6EC24DE285FBC55004A3A2F /* SearchView.swift in Sources */,
 				D69426B228565C8700D91973 /* SharedAuxApp.swift in Sources */,
 				D68879BA28666639005063F1 /* PlaybackBarView.swift in Sources */,
+				D68C8879288D03620014CADA /* SharedViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,7 +457,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SharedAux/Info.plist;
-				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Shared Aux requires access to your music library to enable you to play music";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Queue It requires access to your music library to enable you to play music";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -472,7 +496,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SharedAux/Info.plist;
-				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Shared Aux requires access to your music library to enable you to play music";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Queue It requires access to your music library to enable you to play music";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

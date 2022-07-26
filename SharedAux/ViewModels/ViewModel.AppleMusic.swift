@@ -14,7 +14,6 @@ import MusicKit
 extension ViewModel {
     
     func requestAppleMusicAuthorization() async {
-        
         Task.detached {
             let authorizationStatus = await MusicAuthorization.request()
             if authorizationStatus == .authorized {
@@ -27,11 +26,9 @@ extension ViewModel {
                 }
             }
         }
-        
     }
     
     func searchAppleMusicCatalog(for query: String) async {
-        
         do {
             if !query.isEmpty {
                 var searchRequest = MusicCatalogSearchRequest(term: query,
@@ -55,11 +52,9 @@ extension ViewModel {
         } catch {
             print("Music Catalog Search error: \(error)")
         }
-        
     }
     
     func getArtistInformation(_ artist: Artist) async throws -> Artist {
-        
         do {
             let detailedArtist = try await artist.with([.topSongs, .albums])
             return detailedArtist
@@ -67,11 +62,9 @@ extension ViewModel {
             print("An error occurred while retrieving the artist's information: \(error)")
             throw error
         }
-        
     }
     
     func getAlbumInformation(_ album: Album) async throws -> Album {
-        
         do {
             let detailedAlbum = try await album.with([.tracks])
             return detailedAlbum
@@ -79,6 +72,5 @@ extension ViewModel {
             print("An error occurred while retrieving the album's information: \(error)")
             throw error
         }
-        
     }
 }

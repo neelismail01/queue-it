@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct JoinQueueView: View {
+    
     @EnvironmentObject var viewModel: ViewModel
+    
     @State private var joinCode = ""
     
     var body: some View {
@@ -20,7 +22,9 @@ struct JoinQueueView: View {
                 .cornerRadius(10)
                 .font(.system(size: 16))
                 .submitLabel(.join)
+            
             Spacer()
+            
             Button {
                 Task {
                     await viewModel.joinFirebaseQueue(joinCode: joinCode)

@@ -9,17 +9,13 @@ import SwiftUI
 import MusicKit
 import SDWebImageSwiftUI
 
-enum ViewState {
-    case loading
-    case ready
-    case error
-}
-
 struct ArtistView: View {
     
     @EnvironmentObject var viewModel: ViewModel
+    
     @State var detailedArtistInfo: Artist?
-    @State var state: ViewState = .loading
+    @State var state: ScreenState = .loading
+    
     let artist: Artist
     let columns = [
         GridItem(.flexible()),
@@ -27,7 +23,7 @@ struct ArtistView: View {
     ]
     
     var loading: some View {
-        return Text("Loading...")
+        Text("Loading...")
     }
     
     var topSongsSection: some View {
@@ -45,19 +41,22 @@ struct ArtistView: View {
                 }
                 
             }
-            ForEach(topSongs.count > 4 ? Array(topSongs[...4]) : Array(topSongs)) { song in
-                TrackRow(song: song)
+            
+            ForEach(topSongs.count > 4 ? Array(topSongs[...4]) : Array(topSongs), id: \.id) { song in
+                MusicItemRow(id: song.id.rawValue,
+                             title: song.title,
+                             artistName: song.artistName,
+                             artworkUrlSmall: song.artwork?.url(width: 100, height: 100),
+                             artworkUrlLarge: song.artwork?.url(width: 500, height: 500),
+                             isExplicit: song.contentRating == .explicit)
             }
         }
         .padding(.bottom, 15)
     }
     
     var albumsSection: some View {
-        
         let albums = detailedArtistInfo?.albums ?? []
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy"
-        
+
         return VStack {
             HStack {
                 Text("Albums")
@@ -70,35 +69,7 @@ struct ArtistView: View {
                     NavigationLink {
                         AlbumView(album: album)
                     } label: {
-                        VStack(alignment: .leading) {
-                            WebImage(url: album.artwork?.url(width: 300, height: 300))
-                                .placeholder(
-                                    Image(systemName: "music.note")
-                                )
-                                .resizable()
-                                .frame(width: 150, height: 150)
-                                .cornerRadius(5)
-                            HStack() {
-                                Text(album.title)
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(Color(UIColor.label))
-                                    .lineLimit(1)
-                                if album.contentRating == .explicit {
-                                    Text("E")
-                                        .frame(width: 15, height: 15)
-                                        .font(.system(size: 8))
-                                        .foregroundColor(Color(UIColor.systemBackground))
-                                        .background(Color(UIColor.systemGray))
-                                        .cornerRadius(2.5)
-                                }
-                                Spacer()
-                            }
-                            if let releaseDate = album.releaseDate {
-                                Text(dateFormatter.string(from: releaseDate))
-                                    .font(.system(size: 14))
-                                    .foregroundColor(Color(UIColor.secondaryLabel))
-                            }
-                        }
+                        AlbumInformation(album: album)
                     }
                 }
             }
@@ -133,5 +104,40 @@ struct ArtistView: View {
             }
         }
         .navigationBarTitle(artist.name)
+    }
+}
+
+struct AlbumInformation: View {
+    let album: Album
+    
+    var body: some View {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy"
+        
+        return VStack(alignment: .leading) {
+            AlbumImage(frameWidth: 150,
+                       frameHeight: 150,
+                       url: album.artwork?.url(width: 300, height: 300))
+            HStack() {
+                Text(album.title)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(Color(UIColor.label))
+                    .lineLimit(1)
+                if album.contentRating == .explicit {
+                    Text("E")
+                        .frame(width: 15, height: 15)
+                        .font(.system(size: 8))
+                        .foregroundColor(Color(UIColor.systemBackground))
+                        .background(Color(UIColor.systemGray))
+                        .cornerRadius(2.5)
+                }
+                Spacer()
+            }
+            if let releaseDate = album.releaseDate {
+                Text(dateFormatter.string(from: releaseDate))
+                    .font(.system(size: 14))
+                    .foregroundColor(Color(UIColor.secondaryLabel))
+            }
+        }
     }
 }

@@ -9,10 +9,10 @@ import Foundation
 
 struct SongAddition: Identifiable, Codable {
     var id: String = UUID().uuidString
-    var addedBy: String
     var songId: String
     var songName: String
     var songArtist: String
-    var songArtworkUrl: String
+    var songArtworkUrlSmall: String
+    var songArtworkUrlLarge: String
     var isExplicit: Bool
 }

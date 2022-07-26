@@ -14,7 +14,7 @@ class ViewModel: ObservableObject {
     var db = Firestore.firestore()
     var firebaseDocId: String?
     var musicPlayer = MPMusicPlayerController.applicationQueuePlayer
-    var checkSongTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    var checkSongTimer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
     var queueBeingManaged = false
     
     // Application and authorization state

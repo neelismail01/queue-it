@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct QueueControlView: View {
     
     @EnvironmentObject var viewModel: ViewModel
+    
     @State private var showDialog = false
     @State private var showShareSheet = false
     
@@ -35,7 +35,7 @@ struct QueueControlView: View {
         }
     }
     
-    var addSongButton: some View {
+    var addButton: some View {
         NavigationLink(destination: SearchView()) {
             HStack {
                 Image(systemName: "plus")
@@ -71,17 +71,25 @@ struct QueueControlView: View {
         let songAdditions = viewModel.activeQueue?.songAdditions ?? []
         let songAdditionsWithIndex = songAdditions.enumerated().map({ $0 })
         let currentSongIndex = viewModel.activeQueue?.currentSongIndex
+        
         return VStack(alignment: .leading) {
             Text("Queue")
                 .font(.system(size: 18).bold())
-                .padding([.top, .leading])
+                .padding(.top)
                 .padding(.bottom, 5)
             
             ScrollViewReader { proxy in
                 ScrollView {
                     ForEach(songAdditionsWithIndex, id: \.element.id) { index, song in
-                        QueueItem(song: song, isCurrentSong: index == currentSongIndex)
-                            .id(index)
+                        MusicItemRow(id: song.songId,
+                                     title: song.songName,
+                                     artistName: song.songArtist,
+                                     artworkUrlSmall: URL(string: song.songArtworkUrlSmall),
+                                     artworkUrlLarge: URL(string: song.songArtworkUrlLarge),
+                                     isExplicit: song.isExplicit,
+                                     isCurrentSong: index == currentSongIndex,
+                                     isAddSongButtonVisible: false)
+                        .id(index)
                     }
                 }
                 .onChange(of: viewModel.activeQueue?.currentSongIndex) { _ in
@@ -97,7 +105,7 @@ struct QueueControlView: View {
     }
     
     var emptyQueue: some View {
-        return Text("The queue is currently empty.")
+        Text("The queue is currently empty.")
             .font(.system(size: 16).bold())
             .frame(maxHeight: .infinity, alignment: .center)
             .padding(2.5)
@@ -108,9 +116,8 @@ struct QueueControlView: View {
         VStack {
             HStack {
                 inviteButton
-                addSongButton
+                addButton
             }
-            .padding()
             
             if songAdditions.isEmpty {
                 emptyQueue
@@ -118,6 +125,7 @@ struct QueueControlView: View {
                 nonEmptyQueue
             }
         }
+        .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .safeAreaInset(edge: .bottom, alignment: .center) {
             PlaybackBarView()
@@ -136,63 +144,20 @@ struct QueueControlView: View {
             }
         })
         .sheet(isPresented: $showShareSheet, content: {
-            ShareSheet(items: ["You are being invited to a queue on Shared Aux! Here is the code to join: \(viewModel.activeQueue?.joinCode ?? "")"])
+            ShareSheet(items: ["You are being invited to a queue on Queue It! Here is the code to join: \(viewModel.activeQueue?.joinCode ?? "")"])
         })
         .onAppear {
             viewModel.fetchFirebaseQueue()
         }
         .onReceive(viewModel.checkSongTimer) { _ in
-            viewModel.insertNextSongIntoApplicationQueue()
-        }
-    }
-}
-
-struct QueueItem: View {
-    let song: SongAddition
-    let isCurrentSong: Bool
-    
-    var body: some View {
-        HStack {
-            WebImage(url: URL(string: song.songArtworkUrl))
-                .placeholder(
-                    Image(systemName: "music.note")
-                )
-                .resizable()
-                .frame(width: 50, height: 50)
-                .cornerRadius(5)
-            VStack(alignment: .leading) {
-                Spacer()
-                HStack {
-                    if isCurrentSong {
-                        Text(song.songName)
-                            .font(.system(size: 14))
-                            .foregroundColor(.blue)
-                    } else {
-                        Text(song.songName)
-                            .font(.system(size: 14))
-                    }
-                    if  song.isExplicit {
-                        Text("E")
-                            .frame(width: 15, height: 15)
-                            .font(.system(size: 8))
-                            .foregroundColor(Color(UIColor.systemBackground))
-                            .background(Color(UIColor.systemGray))
-                            .cornerRadius(2.5)
-                    }
+            Task {
+                if viewModel.applicationState == .queueOwner {
+                    await viewModel.checkSongStatus()
                 }
-                Spacer()
-                Text(song.songArtist)
-                    .font(.system(size: 14, weight: .light))
-                    .foregroundColor(Color(UIColor.systemGray))
-                Spacer()
             }
-            Spacer()
         }
-        .padding(.leading)
-        .padding([.top], 5)
     }
 }
-
 
 struct ShareSheet: UIViewControllerRepresentable {
     
@@ -203,8 +168,5 @@ struct ShareSheet: UIViewControllerRepresentable {
         return controller
     }
     
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
-        
-    }
-    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

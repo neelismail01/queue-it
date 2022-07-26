@@ -14,25 +14,28 @@ import MediaPlayer
 extension ViewModel {
     
     func checkSongStatus() async {
-        
         if let nowPlayingItem = musicPlayer.nowPlayingItem {
-            if nowPlayingItem.playbackDuration - musicPlayer.currentPlaybackTime < 1 {
+            if nowPlayingItem.playbackDuration - musicPlayer.currentPlaybackTime < 2.5 {
                 await manageQueue()
             }
         }
         
-        if musicPlayer.currentPlaybackTime < 1 {
+        if let songAdditions = activeQueue?.songAdditions {
+            if musicPlayer.nowPlayingItem == nil && !songAdditions.isEmpty {
+                await manageQueue()
+            }
+        }
+        
+        if musicPlayer.nowPlayingItem != nil && musicPlayer.currentPlaybackTime < 1 {
             await updateCurrentSongIndex()
         }
         
         await MainActor.run {
             isSongPlaying = musicPlayer.playbackState == .playing
         }
-        
     }
 
     func goToNextSong() async {
-        
         guard let songAdditions = activeQueue?.songAdditions else {
             return
         }
@@ -42,21 +45,17 @@ extension ViewModel {
         }
         
         musicPlayer.skipToNextItem()
-        
     }
 
     func goToPreviousSong() {
-        
         if musicPlayer.currentPlaybackTime < 5 {
             musicPlayer.skipToPreviousItem()
         } else {
             musicPlayer.skipToBeginning()
         }
-        
     }
 
     func manageQueue() async {
-        
         guard let songAdditions = activeQueue?.songAdditions else {
             return
         }
@@ -76,11 +75,9 @@ extension ViewModel {
                 queueBeingManaged = false
             }
         }
-        
     }
 
     func initializeQueue(with songId: String) async {
-        
         do {
             musicPlayer.setQueue(with: [songId])
             try await musicPlayer.prepareToPlay()
@@ -88,11 +85,9 @@ extension ViewModel {
         } catch {
             print("An error occurred while initializing the queue: \(error)")
         }
-        
     }
 
     func addNextSongToQueue() async {
-        
         guard let songAdditions = activeQueue?.songAdditions else {
             return
         }
@@ -111,5 +106,4 @@ extension ViewModel {
             print("An error occurred while adding the next song to the queue: \(error)")
         }
     }
-
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct CreateQueueView: View {
     
     @EnvironmentObject var viewModel: ViewModel
+    
     @State var queueName = ""
     
     var body: some View {
@@ -20,10 +21,12 @@ struct CreateQueueView: View {
                 .background(Color(UIColor.systemGray6))
                 .cornerRadius(10)
                 .font(.system(size: 16))
+            
             Spacer()
+            
             Button {
                 Task {
-                    await viewModel.createFirebaseQueue(nameOfQueue: queueName)
+                    await viewModel.createFirebaseQueue(queueName: queueName)
                 }
             } label: {
                 Text("Continue")

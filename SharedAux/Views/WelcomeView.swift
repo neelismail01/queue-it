@@ -11,22 +11,29 @@ import MusicKit
 struct WelcomeView: View {
     
     @Environment(\.openURL) private var openURL
+    
     @EnvironmentObject var viewModel: ViewModel
     
     var body: some View {
         VStack {
             Spacer()
-            Text("Shared Aux")
+            
+            Text("Queue It")
                 .font(.system(size: 40, weight: .bold))
                 .padding(2.5)
+            
             Text("Curate Music Together")
                 .font(.system(size: 16, weight: .light))
+            
             Spacer()
-            Text("Open Settings to grant Shared Aux access to your Apple Music")
+            
+            Text("Open Settings to grant Queue It access to your Apple Music")
                 .foregroundColor(.primary)
                 .font(.system(size: 16, weight: .light))
                 .multilineTextAlignment(.center)
+            
             Spacer()
+            
             Button(action: handleButtonPressed) {
                 Text("Open Settings")
                     .font(.system(size: 16, weight: .bold))
@@ -37,6 +44,7 @@ struct WelcomeView: View {
             .background(.blue)
             .cornerRadius(5)
             .padding()
+            
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

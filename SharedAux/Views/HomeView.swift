@@ -14,13 +14,18 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
+            
             Spacer()
-            Text("Shared Aux")
+            
+            Text("Queue It")
                 .font(.system(size: 40, weight: .bold))
                 .padding(2.5)
+            
             Text("Curate Music Together")
                 .font(.system(size: 16, weight: .light))
+            
             Spacer()
+            
             NavigationLink(destination: CreateQueueView()) {
                 Text("Create a Queue")
                     .fontWeight(.bold)
@@ -31,12 +36,14 @@ struct HomeView: View {
                     .background(.blue)
                     .cornerRadius(5)
             }
+            
             NavigationLink(destination: JoinQueueView()) {
                 Text("Join a Queue")
                     .font(.system(size: 16))
                     .frame(maxWidth: .infinity)
                     .padding()
             }
+            
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
