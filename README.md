@@ -1,7 +1,7 @@
 # Queue It
 
 ## Technologies
-The user interface of this application was built with **Swift** and **SwiftUI**. Persistant storage and real-time queue syncing was achieved using **Firebase Firestore**. Queue It integrated with MusicKit to offer Apple Music subscribers search and playback functionality to its catalogue of 50+ million songs.
+The user interface of this application was built with **Swift** and **SwiftUI**. Persistant storage and real-time queue syncing was achieved using **Firebase Firestore**. Queue It integrated with MusicKit to offer Apple Music subscribers search and playback functionality to its catalogue of 90+ million songs.
 
 ## Features:
   * Create queues and invite others to contribute in real-time
